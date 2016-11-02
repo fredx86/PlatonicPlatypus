@@ -1,6 +1,7 @@
 #ifndef PP_ALLOCATOR_H_
 #define PP_ALLOCATOR_H_
 
+#include <string.h>
 #include <stdlib.h>
 
 struct allocator
@@ -11,6 +12,6 @@ struct allocator
 };
 
 //Return: 1 Success - 0 Error
-int allocator_re(struct allocator*, size_t size, size_t minalloc);
+int alloc_re(struct allocator*, size_t size, size_t minalloc);
 
 #endif

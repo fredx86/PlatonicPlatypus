@@ -1,6 +1,6 @@
 #include "pp/allocator.h"
 
-int allocator_re(struct allocator* alloc, size_t size, size_t minalloc)
+int alloc_re(struct allocator* alloc, size_t size, size_t minalloc)
 {
   if (size <= *alloc->alloc_size)
     return (1);

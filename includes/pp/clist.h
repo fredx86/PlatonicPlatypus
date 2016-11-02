@@ -16,9 +16,11 @@ typedef int (*clfunc)(const clist_t*, const void*);
 
 clist_t* clcrt(clist_t*, void*);
 
+clist_t* cladd(clist_t*, clist_t*, void*);
 clist_t* clfrnt(clist_t*, void*);
 clist_t* clbck(clist_t*, void*);
-//clist_t* clrmv(clist_t*);
+
+void clrmv(clist_t*, clist_t*);
 
 void* clfndf(clist_t*, clfunc, const void*);
 
