@@ -59,7 +59,16 @@ void skbrk()
 
 int _skconnect(socket_t* sock, struct addrinfo* addrinfo)
 {
-  return (connect(sock->sock, addrinfo->ai_addr, addrinfo->ai_addrlen) == 0);
+  if ((sock->sock = socket(addrinfo->ai_family, addrinfo->ai_socktype, addrinfo->ai_protocol)) == INVALID_SOCKET)
+    return (0);
+  if (sock->type != SOCK_STREAM) //If not TCP, don't need to connect
+    return (1);
+  if (connect(sock->sock, addrinfo->ai_addr, addrinfo->ai_addrlen) != 0)
+  {
+    skdel(sock);
+    return (0);
+  }
+  return (1);
 }
 
 int _skaddrinfo(socket_t* sock, const char* node, const char* service, struct addrinfo* hints, _skaddrinfofunc func)
@@ -72,15 +81,11 @@ int _skaddrinfo(socket_t* sock, const char* node, const char* service, struct ad
   tmp = result;
   while (tmp)
   {
-    if ((sock->sock = socket(tmp->ai_family, tmp->ai_socktype, tmp->ai_protocol)) != INVALID_SOCKET)
+    if (func(sock, tmp))
     {
-      if (func(sock, tmp))
-      {
-        sock->addr = tmp->ai_addr;
-        sock->addr_size = tmp->ai_addrlen;
-        break;
-      }
-      skdel(sock);
+      sock->addr = tmp->ai_addr;
+      sock->addr_size = tmp->ai_addrlen;
+      break;
     }
     tmp = tmp->ai_next;
   }
