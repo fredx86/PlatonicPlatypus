@@ -32,7 +32,8 @@ typedef int (*_skaddrinfofunc)(socket_t*, struct addrinfo*);
 
 socket_t* skcrt(socket_t*, int);
 
-int skconnect(socket_t* sock, const char*, unsigned short);
+int skconnect(socket_t*, const char*, unsigned short);
+int skbind(socket_t*, unsigned short, int);
 
 ssize_t skrecv(socket_t*, void*, size_t);
 ssize_t sksend(socket_t*, const barray_t*);
@@ -43,6 +44,7 @@ void skbrk();
 //SOCKET UTILS
 
 int _skconnect(socket_t*, struct addrinfo*);
+int _skbind(socket_t*, struct addrinfo*);
 int _skaddrinfo(socket_t*, const char*, const char*, struct addrinfo*, _skaddrinfofunc);
 
 #endif
