@@ -4,7 +4,6 @@
 #include <string.h>
 #include <stdarg.h>
 #include "allocator.h"
-#include "pp.h"
 
 typedef struct s_barray
 {
@@ -27,7 +26,7 @@ barray_t* basub(barray_t*, barray_t*, size_t, size_t);
 barray_t* barmv(barray_t*, size_t, size_t);
 
 int bacmp(barray_t*, const void*, size_t);
-size_t bafnd(barray_t*, const void*, size_t);
+ssize_t bafnd(barray_t*, const void*, size_t);
 
 void badel(barray_t*);
 

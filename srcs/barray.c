@@ -100,7 +100,7 @@ int bacmp(barray_t* barray, const void* bytes, size_t size)
   return (1);
 }
 
-size_t bafnd(barray_t* barray, const void* bytes, size_t size)
+ssize_t bafnd(barray_t* barray, const void* bytes, size_t size)
 {
   size_t i, j, k;
 
@@ -112,7 +112,7 @@ size_t bafnd(barray_t* barray, const void* bytes, size_t size)
     if (j == size)
       return (i);
   }
-  return (PP_NPOS);
+  return (-1);
 }
 
 void badel(barray_t* barray)

@@ -37,7 +37,6 @@ clist_t* clfrnt(clist_t* clist, void* elem)
   return (clist->begin);
 }
 
-
 clist_t* clbck(clist_t* clist, void* elem)
 {
   clist_t* list;

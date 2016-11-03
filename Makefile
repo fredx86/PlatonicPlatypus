@@ -2,6 +2,7 @@ SRCS          = srcs/allocator.c				\
 								srcs/barray.c						\
 								srcs/clist.c						\
 								srcs/hmap.c							\
+								srcs/socket.c						\
 
 OBJS          = $(SRCS:.c=.o)
 
