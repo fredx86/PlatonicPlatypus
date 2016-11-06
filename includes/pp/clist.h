@@ -8,21 +8,26 @@ typedef struct s_clist
   void* elem;
   struct s_clist* prev;
   struct s_clist* next;
-  struct s_clist* begin;
-  struct s_clist* end;
+  struct s_clist* _begin;
+  struct s_clist* _end;
 } clist_t;
 
 typedef int (*clfunc)(const clist_t*, const void*);
 
-clist_t* clcrt(clist_t*, void*);
+clist_t* clcrt(clist_t*, size_t, void**);
 
 clist_t* cladd(clist_t*, clist_t*, void*);
 clist_t* clfrnt(clist_t*, void*);
 clist_t* clbck(clist_t*, void*);
 
+clist_t* clbegin(clist_t*);
+clist_t* clend(clist_t*);
+
+void* clpop(clist_t*);
 void clrmv(clist_t*, clist_t*);
 
 void* clfndf(clist_t*, clfunc, const void*);
+int clempty(const clist_t*);
 
 void cldel(clist_t*);
 

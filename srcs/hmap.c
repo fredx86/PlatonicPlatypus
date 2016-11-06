@@ -42,8 +42,8 @@ void hmdel(hmap_t* hmap)
   {
     if (hmap->buckets[i] == NULL)
       continue;
-    it = hmap->buckets[i]->begin;
-    while (it != hmap->buckets[i]->end)
+    it = hmap->buckets[i]->_begin->next;
+    while (it != hmap->buckets[i]->_end)
     {
       tmp_it = it->next;
       free(it); //free hmpair_t
@@ -62,19 +62,15 @@ hmpair_t* _hmadd_keyval(hmap_t* hmap, const void* key, void* value)
 
   if (hmap->buckets[index] == NULL)
   {
-    if ((list = malloc(sizeof(*list))) == NULL ||
-      (pair = _hmpair(key, value)) == NULL)
+    if ((list = malloc(sizeof(*list))) == NULL)
       return (NULL);
     hmap->buckets[index] = list;
-    clcrt(list, pair);
-    return (pair);
-  }
-  else //Collisions
-  {
-    if ((pair = _hmpair(key, value)) == NULL)
+    if (clcrt(list, 0, NULL) == NULL)
       return (NULL);
-    clbck(hmap->buckets[index], pair);
   }
+  if ((pair = _hmpair(key, value)) == NULL)
+    return (NULL);
+  clbck(hmap->buckets[index], pair);
   return (pair);
 }
 

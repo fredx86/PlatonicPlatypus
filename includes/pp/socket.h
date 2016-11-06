@@ -25,26 +25,19 @@ typedef struct s_socket
   sock_t sock;
   socklen_t addr_size;
   struct sockaddr *addr;
-  int type;
 } socket_t;
 
-typedef int (*_skaddrinfofunc)(socket_t*, struct addrinfo*);
+typedef int (*skinitfunc)(socket_t*, struct addrinfo*);
 
-socket_t* skcrt(socket_t*, int);
+socket_t* skcrt(socket_t*, const char*, unsigned short, struct addrinfo*, skinitfunc);
 
-int skconnect(socket_t*, const char*, unsigned short);
-int skbind(socket_t*, unsigned short, int);
-
-ssize_t skrecv(socket_t*, void*, size_t);
+ssize_t skrecv(socket_t*, barray_t*, size_t);
 ssize_t sksend(socket_t*, const barray_t*);
 
 void skdel(socket_t*);
-void skbrk();
 
 //SOCKET UTILS
 
-int _skconnect(socket_t*, struct addrinfo*);
-int _skbind(socket_t*, struct addrinfo*);
-int _skaddrinfo(socket_t*, const char*, const char*, struct addrinfo*, _skaddrinfofunc);
+int _skaddrinfo(socket_t*, const char*, const char*, struct addrinfo*, skinitfunc);
 
 #endif

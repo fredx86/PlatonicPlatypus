@@ -8,6 +8,14 @@ barray_t* bacrt(barray_t* barray, const void* bytes, size_t size)
   return (bacpy(barray, bytes, size));
 }
 
+barray_t* bacrts(barray_t* barray, size_t size)
+{
+  barray->size = 0;
+  barray->_alloc = 0;
+  barray->bytes = NULL;
+  return (_barealloc(barray, size) ? barray : NULL);
+}
+
 barray_t* bacpy(barray_t* barray, const void* bytes, size_t size)
 {
   barray->size = 0;

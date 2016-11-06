@@ -13,6 +13,7 @@ typedef struct s_barray
 } barray_t;
 
 barray_t* bacrt(barray_t*, const void*, size_t);
+barray_t* bacrts(barray_t*, size_t);
 
 barray_t* bacpy(barray_t*, const void*, size_t);
 barray_t* baapp(barray_t*, const void*, size_t);
