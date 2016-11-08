@@ -147,5 +147,5 @@ int _barealloc(barray_t* barray, size_t size)
     .type_size = sizeof(*barray->bytes),
     .alloc_size = &barray->_alloc
   };
-  return (alloc_re(&alloc, barray->size + size, 16));
+  return (alloc_pow2(&alloc, barray->size + size, 16));
 }

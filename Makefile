@@ -1,8 +1,10 @@
-SRCS          = srcs/allocator.c				\
+SRCS          = srcs/array.c						\
+								srcs/allocator.c				\
 								srcs/barray.c						\
 								srcs/clist.c						\
 								srcs/hmap.c							\
 								srcs/socket.c						\
+								srcs/utils.c						\
 
 OBJS          = $(SRCS:.c=.o)
 

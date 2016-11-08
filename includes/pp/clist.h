@@ -5,7 +5,7 @@
 
 typedef struct s_clist
 {
-  void* elem;
+  void* item;
   struct s_clist* prev;
   struct s_clist* next;
   struct s_clist* _begin;

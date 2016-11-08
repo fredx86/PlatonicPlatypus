@@ -1,10 +1,10 @@
 #include "pp/clist.h"
 
-clist_t* clcrt(clist_t* clist, size_t size, void** elems)
+clist_t* clcrt(clist_t* clist, size_t size, void** items)
 {
   size_t i;
 
-  clist->elem = NULL;
+  clist->item = NULL;
   clist->_begin = clist;
   if ((clist->_end = _clsetalloc(NULL, clist->_begin, NULL)) == NULL)
     return (NULL);
@@ -12,43 +12,43 @@ clist_t* clcrt(clist_t* clist, size_t size, void** elems)
   clist->next = clist->_end;
   for (i = 0; i < size; ++i)
   {
-    if (!clbck(clist, elems[i]))
+    if (!clbck(clist, items[i]))
       return (NULL);
   }
   return (clist);
 }
 
-clist_t* cladd(clist_t* clist, clist_t* node, void* elem)
+clist_t* cladd(clist_t* clist, clist_t* node, void* item)
 {
   clist_t* list;
 
   if (node == NULL)
-    return (clbck(clist, elem));
+    return (clbck(clist, item));
   if (node == clist->_begin || node == clist->_end)
     return (NULL);
-  if ((list = _clsetalloc(elem, node, node->next)) == NULL)
+  if ((list = _clsetalloc(item, node, node->next)) == NULL)
     return (NULL);
   node->next = list;
   node->next->prev = list;
   return (list);
 }
 
-clist_t* clfrnt(clist_t* clist, void* elem)
+clist_t* clfrnt(clist_t* clist, void* item)
 {
   clist_t* list;
 
-  if ((list = _clsetalloc(elem, clist->_begin, clist->_begin->next)) == NULL)
+  if ((list = _clsetalloc(item, clist->_begin, clist->_begin->next)) == NULL)
     return (NULL);
   clist->_begin->next->prev = list;
   clist->_begin->next = list;
   return (list);
 }
 
-clist_t* clbck(clist_t* clist, void* elem)
+clist_t* clbck(clist_t* clist, void* item)
 {
   clist_t* list;
 
-  if ((list = _clsetalloc(elem, clist->_end->prev, clist->_end)) == NULL)
+  if ((list = _clsetalloc(item, clist->_end->prev, clist->_end)) == NULL)
     return (NULL);
   clist->_end->prev->next = list;
   clist->_end->prev = list;
@@ -72,7 +72,7 @@ void* clpop(clist_t* clist)
 
   if (first == NULL)
     return (NULL);
-  elem = first->elem;
+  elem = first->item;
   clrmv(clist, first);
   return (elem);
 }
@@ -93,7 +93,7 @@ void* clfndf(clist_t* clist, clfunc func, const void* param)
   while (tmp != clist->_end)
   {
     if (func(tmp, param))
-      return (tmp->elem);
+      return (tmp->item);
     tmp = tmp->next;
   }
   return (NULL);
@@ -124,7 +124,7 @@ clist_t* _clsetalloc(void* elem, clist_t* prev, clist_t* next)
 
   if (list == NULL)
     return (NULL);
-  list->elem = elem;
+  list->item = elem;
   list->prev = prev;
   list->next = next;
   return (list);

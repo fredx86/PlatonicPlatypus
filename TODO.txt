@@ -1,2 +1,9 @@
 slctmgr.h
 list.h
+
+utils.h
+> endianess
+> split_token(str, char, char)
+
+net.h
+> float to host...

@@ -11,7 +11,7 @@ struct allocator
   size_t* alloc_size;
 };
 
-//Return: 1 Success - 0 Error
-int alloc_re(struct allocator*, size_t size, size_t minalloc);
+int alloc_re(struct allocator*, size_t);
+int alloc_pow2(struct allocator*, size_t, size_t);
 
 #endif

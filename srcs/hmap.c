@@ -70,13 +70,14 @@ hmpair_t* _hmadd_keyval(hmap_t* hmap, const void* key, void* value)
   }
   if ((pair = _hmpair(key, value)) == NULL)
     return (NULL);
-  clbck(hmap->buckets[index], pair);
+  if (!clbck(hmap->buckets[index], pair))
+    return (NULL);
   return (pair);
 }
 
 int _hmkey_find(const clist_t* list, const void* param)
 {
-  hmpair_t* pair = (hmpair_t*)list->elem;
+  hmpair_t* pair = (hmpair_t*)list->item;
   const void* key = ((const void**)param)[0];
   hmkey_t* keytype = (hmkey_t*)((const void**)param)[1];
   return (_hmkey_cmp(*keytype, pair->key, key));
