@@ -4,6 +4,16 @@ array_t* arcrt(array_t* array, size_t size, void** items)
 {
   size_t i;
 
+  if (!arcrts(array, size))
+    return (NULL);
+  for (i = 0; i < size; ++i)
+    array->item[i] = items[i];
+  array->size = size;
+  return (array);
+}
+
+array_t* arcrts(array_t* array, size_t size)
+{
   array->item = NULL;
   array->_alloc = 0;
   array->size = 0;
@@ -14,9 +24,6 @@ array_t* arcrt(array_t* array, size_t size, void** items)
     free(array->item);
     return (NULL);
   }
-  for (i = 0; i < size; ++i)
-    array->item[i] = items[i];
-  array->size = size;
   return (array);
 }
 
@@ -28,16 +35,25 @@ array_t* aradd(array_t* array, void* item)
   return (array);
 }
 
-void arrmvv(array_t* array, const void* item)
+array_t* arrmvv(array_t* array, const void* item)
 {
-  //TODO
-  (void)array; (void)item;
+  size_t i;
+
+  for (i = 0; i < array->size; ++i)
+  {
+    if (array->item[i] == item)
+      return (arrmvi(array, i));
+  }
+  return (NULL);
 }
 
-void arrmvi(array_t* array, size_t i)
+array_t* arrmvi(array_t* array, size_t i)
 {
-  //TODO
-  (void)array; (void)i;
+  if (i >= array->size)
+    return (NULL);
+  memmove(array->item + i, array->item + i + 1, (array->size - i + 1) * sizeof(*array->item));
+  --array->size;
+  return (array);
 }
 
 void ardel(array_t* array)

@@ -77,13 +77,14 @@ void* clpop(clist_t* clist)
   return (elem);
 }
 
-void clrmv(clist_t* clist, clist_t* node)
+clist_t* clrmv(clist_t* clist, clist_t* node)
 {
   if (node == clist->_begin || node == clist->_end)
-    return;
+    return (NULL);
   node->prev->next = node->next;
   node->next->prev = node->prev;
   free(node);
+  return (clist);
 }
 
 void* clfndf(clist_t* clist, clfunc func, const void* param)

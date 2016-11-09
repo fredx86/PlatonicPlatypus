@@ -11,10 +11,11 @@ typedef struct s_array
 } array_t;
 
 array_t* arcrt(array_t*, size_t, void**);
+array_t* arcrts(array_t*, size_t);
 
 array_t* aradd(array_t*, void*);
-void arrmvv(array_t*, const void*);
-void arrmvi(array_t*, size_t);
+array_t* arrmvv(array_t*, const void*);
+array_t* arrmvi(array_t*, size_t);
 
 void ardel(array_t*);
 
