@@ -1,14 +1,35 @@
 #include "pp/utils.h"
 
-void putb(const char* bytes, size_t size)
+void putb(const void* bytes, size_t size)
 {
   fputb(bytes, size, stdout);
   putchar('\n');
 }
 
-void fputb(const char* bytes, size_t size, FILE* file)
+void fputb(const void* bytes, size_t size, FILE* file)
 {
-  size_t i;
-  for (i = 0; i < size; ++i)
-    fprintf(file, "%c0x%X", i == 0 ? 0 : ' ', bytes[i]);
+  char* tmp = (char*)bytes;
+  for (size_t i = 0; i < size; ++i)
+  {
+    if (i)
+      fprintf(file, " ");
+    fprintf(file, "0x%X", tmp[i]);
+  }
+}
+
+int endianess()
+{
+  int little_endian = 1;
+  return (*(char*)&little_endian == 1);
+}
+
+void* revbytes(void* bytes, size_t bsize)
+{
+  char cpy[bsize];
+  char* tmp = (char*)bytes;
+
+  memcpy(cpy, bytes, bsize);
+  for (size_t i = 0; i < bsize; ++i)
+    tmp[i] = cpy[bsize - i - 1];
+  return (bytes);
 }

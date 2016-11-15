@@ -32,12 +32,14 @@ ssize_t bafnd(barray_t*, const void*, size_t);
 void badel(barray_t*);
 
 
-//BARRAY UTILS
+/* BARRAY UTILS */
 
 int _barealloc(barray_t*, size_t);
 
-//Tranform a pos and size to fit within the barray.
-//Return 1 on success, 0 on erroneous pos/size
+/*
+Tranform a pos and size to fit within the barray.
+Return 1 on success, 0 on erroneous pos/size
+*/
 int _batransform(barray_t*, size_t* pos, size_t* size);
 
 #endif

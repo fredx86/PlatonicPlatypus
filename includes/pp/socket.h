@@ -36,7 +36,7 @@ ssize_t sksend(socket_t*, const barray_t*);
 
 void skdel(socket_t*);
 
-//SOCKET UTILS
+/* SOCKET UTILS */
 
 int _skaddrinfo(socket_t*, const char*, const char*, struct addrinfo*, skinitfunc);
 

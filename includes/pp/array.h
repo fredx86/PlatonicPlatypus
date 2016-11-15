@@ -20,7 +20,7 @@ array_t* arrmvi(array_t*, size_t);
 void ardel(array_t*);
 
 
-//ARRAY UTILS
+/* ARRAY UTILS */
 
 int _arrealloc(array_t*, size_t);
 

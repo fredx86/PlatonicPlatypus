@@ -19,9 +19,11 @@ typedef struct s_hmpair
   void* value;
 } hmpair_t;
 
-//hmap = List of buckets
-//Bucket = Chained list (clist_t)
-//Chained list elem = Pair(key, value) (hmpair_t)
+/*
+hmap = List of buckets
+Bucket = Chained list (clist_t)
+Chained list elem = Pair(key, value) (hmpair_t)
+*/
 typedef struct s_hmap
 {
   hmhashfunc hash;
@@ -37,7 +39,7 @@ hmpair_t* hmget(hmap_t*, const void*);
 
 void hmdel(hmap_t*);
 
-//HMAP UTILS
+/* HMAP UTILS */
 
 hmpair_t* _hmadd_keyval(hmap_t*, const void*, void*);
 
