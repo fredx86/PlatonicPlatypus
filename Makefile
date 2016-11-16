@@ -4,6 +4,7 @@ SRCS          = srcs/array.c						\
 								srcs/clist.c						\
 								srcs/hmap.c							\
 								srcs/net.c							\
+								srcs/slcmgr.c						\
 								srcs/socket.c						\
 								srcs/utils.c						\
 

@@ -17,6 +17,9 @@ array_t* aradd(array_t*, void*);
 array_t* arrmvv(array_t*, const void*);
 array_t* arrmvi(array_t*, size_t);
 
+ssize_t arindex(array_t*, const void*);
+int arhas(array_t*, const void*);
+
 void ardel(array_t*);
 
 

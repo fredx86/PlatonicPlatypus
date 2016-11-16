@@ -2,11 +2,9 @@
 
 array_t* arcrt(array_t* array, size_t size, void** items)
 {
-  size_t i;
-
   if (!arcrts(array, size))
     return (NULL);
-  for (i = 0; i < size; ++i)
+  for (size_t i = 0; i < size; ++i)
     array->item[i] = items[i];
   array->size = size;
   return (array);
@@ -37,14 +35,8 @@ array_t* aradd(array_t* array, void* item)
 
 array_t* arrmvv(array_t* array, const void* item)
 {
-  size_t i;
-
-  for (i = 0; i < array->size; ++i)
-  {
-    if (array->item[i] == item)
-      return (arrmvi(array, i));
-  }
-  return (NULL);
+  ssize_t pos = arindex(array, item);
+  return (pos != -1 ? arrmvi(array, pos) : NULL);
 }
 
 array_t* arrmvi(array_t* array, size_t i)
@@ -54,6 +46,21 @@ array_t* arrmvi(array_t* array, size_t i)
   memmove(array->item + i, array->item + i + 1, (array->size - i + 1) * sizeof(*array->item));
   --array->size;
   return (array);
+}
+
+ssize_t arindex(array_t* array, const void* item)
+{
+  for (size_t i = 0; i < array->size; ++i)
+  {
+    if (array->item[i] == item)
+      return (i);
+  }
+  return (-1);
+}
+
+int arhas(array_t* array, const void* item)
+{
+  return (arindex(array, item) != -1);
 }
 
 void ardel(array_t* array)
