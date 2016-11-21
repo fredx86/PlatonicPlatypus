@@ -2,6 +2,7 @@
 #define PP_UTILS_H_
 
 #include <stdio.h>
+#include <sys/time.h>
 #include "array.h"
 #include "barray.h"
 
@@ -10,6 +11,8 @@ void fputb(const void*, size_t, FILE*);
 
 int endianess(); /* 1 is little endian, 0 is big endian */
 void* revbytes(void*, size_t);
+
+void timems(struct timeval*, float);
 
 //int split(array_t*, const char*, size_t);
 

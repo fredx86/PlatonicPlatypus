@@ -33,3 +33,9 @@ void* revbytes(void* bytes, size_t bsize)
     tmp[i] = cpy[bsize - i - 1];
   return (bytes);
 }
+
+void timems(struct timeval* time, float ms)
+{
+  time->tv_sec = ms / 1000;
+  time->tv_usec = ms * 1000 - time->tv_usec * 1000000; 
+}
