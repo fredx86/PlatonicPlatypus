@@ -26,6 +26,7 @@ clist_t* clend(clist_t*);
 void* clpop(clist_t*);
 clist_t* clrmv(clist_t*, clist_t*);
 
+int cliter(clist_t*, clist_t** it);
 void* clfndf(clist_t*, clfunc, const void*);
 int clempty(const clist_t*);
 
