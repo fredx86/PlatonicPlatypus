@@ -87,6 +87,25 @@ clist_t* clrmv(clist_t* clist, clist_t* node)
   return (clist);
 }
 
+int cliter(clist_t* clist, clist_t** it)
+{
+  clist_t* end = clend(clist);
+
+  if (!end)
+    return (0);
+  if (*it == NULL)
+  {
+    *it = clbegin(clist);
+    return (1);
+  }
+  if (*it != end)
+  {
+    *it = (*it)->next;
+    return (1);
+  }
+  return (0);
+}
+
 void* clfndf(clist_t* clist, clfunc func, const void* param)
 {
   clist_t* tmp = clist->_begin->next;
