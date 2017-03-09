@@ -1,5 +1,4 @@
 #include "llist.h"
-#include <stdio.h>
 
 ll_head_t* ll_create()
 {
@@ -21,21 +20,6 @@ ll_t* ll_swap(ll_t* dest, ll_t* src)
   return (dest);
 }
 
-ll_t* ll_node(ll_head_t* head, void* elem)
-{
-  ll_t* node;
-
-  if (head == NULL)
-    return (NULL);
-  if ((node = mem_get(sizeof(*node))) == NULL)
-    return (NULL);
-  node->head = head;
-  node->elem = elem;
-  node->next = NULL;
-  node->prev = NULL;
-  return (node);
-}
-
 void* ll_pop(ll_head_t* head)
 {
   void* elem;
@@ -54,7 +38,7 @@ ll_t* ll_push(ll_head_t* head, ll_t* node, void* elem)
   if (head == NULL)
     return (NULL);
 
-  if ((tmp = ll_node(head, elem)) == NULL)
+  if ((tmp = ll_make_node(head, elem)) == NULL)
     return (NULL);
   return (ll_push_node(head, node, tmp));
 }
@@ -134,36 +118,17 @@ void ll_destroy(ll_head_t* head)
   mem_release(head);
 }
 
-int main()
+ll_t* ll_make_node(ll_head_t* head, void* elem)
 {
-  ll_head_t* head = ll_create();
+  ll_t* node;
 
-  ll_push_back(head, "1");
-  ll_t* a = ll_push_back(head, "2");
-  ll_push_back(head, "4");
-  ll_push_front(head, "0");
-  ll_push(head, a, "3");
-
-  ll_erase(head->begin);
-  ll_erase(head->end);
-  ll_erase(a);
-
-  ll_push_back(head, "42");
-
-  ll_t* tmp = head->begin;
-  while (tmp)
-  {
-    printf("%s\n", (char*)tmp->elem);
-    tmp = tmp->next;
-  }
-  printf("###\n");
-  tmp = head->end;
-  while (tmp)
-  {
-    printf("%s\n", (char*)tmp->elem);
-    tmp = tmp->prev;
-  }
-  ll_destroy(head);
-
-  return (0);
+  if (head == NULL)
+    return (NULL);
+  if ((node = mem_get(sizeof(*node))) == NULL)
+    return (NULL);
+  node->head = head;
+  node->elem = elem;
+  node->next = NULL;
+  node->prev = NULL;
+  return (node);
 }
