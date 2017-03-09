@@ -1,5 +1,5 @@
-#ifndef HMAP_HPP_
-#define HMAP_HPP_
+#ifndef HMAP_H_
+#define HMAP_H_
 
 #include <stdlib.h>
 #include <string.h>
