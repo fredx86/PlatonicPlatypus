@@ -3,7 +3,8 @@
 
 #include <stdlib.h>
 
-void* mem_get(unsigned size);
+void* mem_get(size_t size);
+void* mem_get_from(void* ptr, size_t size);
 void mem_release(void* ptr);
 
 #endif
