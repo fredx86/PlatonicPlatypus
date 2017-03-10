@@ -21,7 +21,6 @@ typedef struct s_llist
 ll_head_t* ll_create();
 
 ll_t* ll_swap(ll_t* dest, ll_t* src); /* Swap elem between src and dest. Return dest */
-ll_t* ll_find(ll_head_t*, void*);
 
 void* ll_pop(ll_head_t*); /* Dequeue 1 node from beginning of the list. Return the elem field */
 ll_t* ll_push(ll_head_t*, ll_t* node, void*); /* Push an element into the list. If node is NULL, it pushes a node at the end */
