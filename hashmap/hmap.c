@@ -4,7 +4,7 @@ hm_t* hm_create(size_t size, hm_key_t key_type, hm_hash_f hash_func)
 {
   hm_t* map;
 
-  if ((map = mem_get(sizeof(*map))) == NULL)
+  if (size == 0 || (map = mem_get(sizeof(*map))) == NULL)
     return (NULL);
   map->size = size;
   map->hash = (hash_func == NULL ? &hm_jenkins : hash_func);
