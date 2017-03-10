@@ -34,13 +34,13 @@ hm_pair_t* hm_get(hm_t*, const void*);
 
 void hm_destroy(hm_t*);
 
-size_t hm_key_index(hm_t*, const void*);
+size_t hm_key_index(hm_t*, const void* key);
 hm_pair_t* hm_add_keyval(hm_t*, const void*, void*);
 hm_pair_t* hm_key_find(hm_t*, const ll_head_t*, const void*);
 int hm_key_cmp(hm_key_t, const void*, const void*);
 size_t hm_key_size(hm_key_t, const void*);
 
 hm_pair_t* hm_make_pair(const void*, void*);
-size_t hm_jenkins(const char*, size_t);
+size_t hm_jenkins(const char*, size_t); /* Jenkins hash function -> https://en.wikipedia.org/wiki/Jenkins_hash_function */
 
 #endif
