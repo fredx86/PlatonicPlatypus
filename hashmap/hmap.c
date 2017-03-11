@@ -1,6 +1,6 @@
 #include "hmap.h"
 
-hm_t* hm_create(size_t size, hm_key_t key_type, hm_hash_f hash_func)
+hm_t* hm_create(hm_size size, hm_key_t key_type, hm_hash_f hash_func)
 {
   hm_t* map;
 
@@ -13,6 +13,21 @@ hm_t* hm_create(size_t size, hm_key_t key_type, hm_hash_f hash_func)
     return (NULL);
   memset(map->buckets, 0, size * sizeof(*map->buckets));
   return (map);
+}
+
+void hm_clear(hm_t* map)
+{
+  if (map == NULL)
+    return;
+  for (size_t i = 0; i < map->size; ++i)
+  {
+    if (map->buckets[i] == NULL)
+      continue;
+    while (ll_empty(map->buckets[i]) == 0)
+      mem_release(ll_pop(map->buckets[i]));
+    ll_destroy(map->buckets[i]);
+    map->buckets[i] = NULL;
+  }
 }
 
 hm_pair_t* hm_put(hm_t* map, const void* key, void* value)
@@ -40,15 +55,7 @@ void hm_destroy(hm_t* map)
 {
   if (map == NULL)
     return;
-
-  for (size_t i = 0; i < map->size; ++i)
-  {
-    if (map->buckets[i] == NULL)
-      continue;
-    while (ll_empty(map->buckets[i]) == 0)
-      mem_release(ll_pop(map->buckets[i]));
-    ll_destroy(map->buckets[i]);
-  }
+  hm_clear(map);
   mem_release(map->buckets);
   mem_release(map);
 }

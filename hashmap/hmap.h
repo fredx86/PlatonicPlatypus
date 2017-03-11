@@ -7,6 +7,14 @@
 
 typedef size_t (*hm_hash_f)(const char*, size_t);
 
+typedef enum e_hmsize
+{
+  HM_SMALL = 256,
+  HM_MEDIUM = 1024,
+  HM_BIG = 4096,
+  HM_VERY_BIG = 8192
+} hm_size;
+
 typedef enum e_hmkey
 {
   HM_STRING,
@@ -27,7 +35,9 @@ typedef struct s_hmap
   ll_head_t** buckets;
 } hm_t;
 
-hm_t* hm_create(size_t, hm_key_t, hm_hash_f);
+hm_t* hm_create(hm_size, hm_key_t, hm_hash_f);
+
+void hm_clear(hm_t*);
 
 hm_pair_t* hm_put(hm_t*, const void*, void*);
 hm_pair_t* hm_get(hm_t*, const void*);

@@ -20,6 +20,12 @@ int main()
   assert(hm_put(map, "c", "collision2") != NULL);
   assert(hm_get(map, "c") != NULL);
   assert(strcmp((char*)hm_get(map, "c")->value, "collision2") == 0);
+
+  hm_clear(map);
+  assert(hm_get(map, "a") == NULL);
+  assert(hm_put(map, "a", NULL) != NULL);
+  assert(hm_get(map, "a") != NULL);
+
   hm_destroy(map);
 
   fprintf(stderr, "[assert] All tests passed successfully\n");

@@ -13,6 +13,7 @@ typedef struct s_barray
 
 ba_t* ba_create(const void*, size_t);
 
+void ba_clear(ba_t*);
 ba_t* ba_set(ba_t*, const void*, size_t);
 ba_t* ba_app(ba_t*, const void*, size_t);
 ba_t* ba_app_byte(ba_t*, char);
