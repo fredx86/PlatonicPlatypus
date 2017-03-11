@@ -4,7 +4,7 @@ ba_t* ba_create(const void* bytes, size_t size)
 {
   ba_t* barray;
 
-  if ((barray = mem_get(sizeof(*barray))) == NULL)
+  if ((barray = malloc(sizeof(*barray))) == NULL)
     return (NULL);
   barray->bytes = NULL;
   barray->size = 0;
@@ -16,7 +16,7 @@ void ba_clear(ba_t* barray)
 {
   if (barray == NULL)
     return;
-  mem_release(barray->bytes);
+  free(barray->bytes);
   barray->size = 0;
   barray->alloc = 0;
   barray->bytes = NULL;
@@ -111,8 +111,8 @@ void ba_destroy(ba_t* barray)
 {
   if (barray == NULL)
     return;
-  mem_release(barray->bytes);
-  mem_release(barray);
+  free(barray->bytes);
+  free(barray);
 }
 
 int ba_memory_for(ba_t* barray, size_t size)
@@ -122,7 +122,7 @@ int ba_memory_for(ba_t* barray, size_t size)
   if (barray->alloc >= barray->size + size) //If we are still good on memory
     return (1);
   alloc_size = ba_alloc_size(barray->size + size);
-  if ((barray->bytes = mem_get_from(barray->bytes, alloc_size)) == NULL)
+  if ((barray->bytes = realloc(barray->bytes, alloc_size)) == NULL)
     return (0);
   barray->alloc = alloc_size;
   return (1);

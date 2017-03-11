@@ -1,6 +1,5 @@
 SRCS	=	 unit.c		\
-		../barray.c	\
-		../mem_pool.c
+		../barray.c
 
 OBJS	= $(SRCS:.c=.o)
 

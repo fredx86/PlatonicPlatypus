@@ -2,7 +2,7 @@
 #define BARRAY_H_
 
 #include <string.h>
-#include "mem_pool.h"
+#include <stdlib.h>
 
 typedef struct s_barray
 {

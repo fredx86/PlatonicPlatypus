@@ -1,7 +1,7 @@
 #ifndef LLIST_H_
 #define LLIST_H_
 
-#include "mem_pool.h"
+#include <stdlib.h>
 
 typedef struct s_llist ll_t;
 typedef struct s_llhead

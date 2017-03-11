@@ -4,14 +4,13 @@ hm_t* hm_create(hm_size size, hm_key_t key_type, hm_hash_f hash_func)
 {
   hm_t* map;
 
-  if (size == 0 || (map = mem_get(sizeof(*map))) == NULL)
+  if (size == 0 || (map = malloc(sizeof(*map))) == NULL)
     return (NULL);
   map->size = size;
   map->hash = (hash_func == NULL ? &hm_jenkins : hash_func);
   map->key = key_type;
-  if ((map->buckets = mem_get(size * sizeof(*map->buckets))) == NULL)
+  if ((map->buckets = calloc(size, sizeof(*map->buckets))) == NULL)
     return (NULL);
-  memset(map->buckets, 0, size * sizeof(*map->buckets));
   return (map);
 }
 
@@ -24,7 +23,7 @@ void hm_clear(hm_t* map)
     if (map->buckets[i] == NULL)
       continue;
     while (ll_empty(map->buckets[i]) == 0)
-      mem_release(ll_pop(map->buckets[i]));
+      free(ll_pop(map->buckets[i]));
     ll_destroy(map->buckets[i]);
     map->buckets[i] = NULL;
   }
@@ -56,8 +55,8 @@ void hm_destroy(hm_t* map)
   if (map == NULL)
     return;
   hm_clear(map);
-  mem_release(map->buckets);
-  mem_release(map);
+  free(map->buckets);
+  free(map);
 }
 
 size_t hm_key_index(hm_t* map, const void* key)
@@ -118,7 +117,7 @@ hm_pair_t* hm_make_pair(const void* key, void* value)
 {
   hm_pair_t* pair;
 
-  if ((pair = mem_get(sizeof(*pair))) == NULL)
+  if ((pair = malloc(sizeof(*pair))) == NULL)
     return (NULL);
   pair->key = key;
   pair->value = value;

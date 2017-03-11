@@ -4,7 +4,7 @@ ll_head_t* ll_create()
 {
   ll_head_t* head;
 
-  if ((head = mem_get(sizeof(*head))) == NULL)
+  if ((head = malloc(sizeof(*head))) == NULL)
     return (NULL);
   head->begin = NULL;
   head->end = NULL;
@@ -85,11 +85,11 @@ ll_t* ll_push_front(ll_head_t* head, void* elem)
 
 ll_t* ll_erase(ll_t* node)
 {
-  ll_t* tmp;
+  ll_t* next;
 
   if (node == NULL)
     return (NULL);
-  tmp = node->next;
+  next = node->next;
 
   if (node->prev == NULL)
     node->head->begin = node->next;
@@ -100,8 +100,8 @@ ll_t* ll_erase(ll_t* node)
     node->head->end = node->prev;
   else
     node->next->prev = node->prev;
-  mem_release(node);
-  return (tmp);
+  free(node);
+  return (next);
 }
 
 int ll_empty(const ll_head_t* head)
@@ -115,7 +115,7 @@ void ll_destroy(ll_head_t* head)
 {
   while (ll_empty(head) == 0)
     ll_pop(head);
-  mem_release(head);
+  free(head);
 }
 
 ll_t* ll_make_node(ll_head_t* head, void* elem)
@@ -124,7 +124,7 @@ ll_t* ll_make_node(ll_head_t* head, void* elem)
 
   if (head == NULL)
     return (NULL);
-  if ((node = mem_get(sizeof(*node))) == NULL)
+  if ((node = malloc(sizeof(*node))) == NULL)
     return (NULL);
   node->head = head;
   node->elem = elem;
