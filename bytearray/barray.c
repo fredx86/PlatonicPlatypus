@@ -94,7 +94,7 @@ int ba_memory_for(ba_t* barray, size_t size)
 {
   size_t alloc_size;
 
-  if (barray->bytes != NULL && barray->alloc >= barray->size + size) //If we are still good on memory
+  if (barray->alloc >= barray->size + size) //If we are still good on memory
     return (1);
   alloc_size = ba_alloc_size(barray->size + size);
   if ((barray->bytes = realloc(barray->bytes, alloc_size)) == NULL)
