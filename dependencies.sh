@@ -5,10 +5,13 @@ DEPENDENCIES=(["packet"]="bytearray" ["hashmap"]="linkedlist")
 
 get_dependencies()
 {
-    DIR=$(echo "${DEPENDENCIES[$1]}")
-    if [ $DIR ]; then
-	cp "$DIR"/* "$1"
+    DIRS=$(echo "${DEPENDENCIES[$1]}")
+    if [ "$DIRS" ]; then
+	for DIR in $DIRS; do
+	    cp "$DIR"/*.* "$1" || return 1
+	done
     fi
+    return 0
 }
 
 run_tests()
@@ -18,6 +21,17 @@ run_tests()
     ./unitary || return 1
     make fclean 1> /dev/null
     return 0
+}
+
+err()
+{
+    echo -e "[\e[31mINFO\e[0m] $1" > /dev/stderr
+    exit 1
+}
+
+info()
+{
+    echo -e "[\e[32mINFO\e[0m] $1"
 }
 
 if [ ! $1 ]; then
@@ -30,10 +44,11 @@ if [ $1 == "--help" ]; then
     exit 0
 fi
 TARGET=${1%/}
-get_dependencies "$TARGET"
+
+get_dependencies "$TARGET" || err "Failed to recover dependencies for $TARGET"
 run_tests "$TARGET" && BUILD=1
 if [ $BUILD ]; then
-    echo -e "[\e[32mINFO\e[0m] Build OK for '$TARGET'"
+    info "Build OK for $TARGET"
 else
-    echo -e "[\e[31mINFO\e[0m] Build KO for '$TARGET'"
+    err "Build KO for $TARGET"
 fi
