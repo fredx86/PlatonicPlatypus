@@ -1,4 +1,3 @@
-#include <stdio.h>
 #include <assert.h>
 #include "../packet.h"
 
@@ -41,7 +40,5 @@ int main()
   assert(strcmp(data, "hello") == 0);
   assert(pk_get_i32(packet, &i) != NULL);
   assert(i == 97531);
-
-  fprintf(stderr, "[assert] All tests passed successfully\n");
   return (0);
 }

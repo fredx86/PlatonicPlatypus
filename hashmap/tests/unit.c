@@ -1,4 +1,3 @@
-#include <stdio.h>
 #include <assert.h>
 #include "../hmap.h"
 
@@ -27,7 +26,5 @@ int main()
   assert(hm_get(map, "a") != NULL);
 
   hm_destroy(map);
-
-  fprintf(stderr, "[assert] All tests passed successfully\n");
   return (0);
 }

@@ -1,4 +1,3 @@
-#include <stdio.h>
 #include <assert.h>
 #include "../barray.h"
 
@@ -66,7 +65,5 @@ int main()
   assert(ba_find_byte(array, 'h') == NULL);
 
   ba_destroy(array);
-
-  fprintf(stderr, "[assert] All tests passed successfully\n");
   return (0);
 }
