@@ -16,7 +16,10 @@ void ba_clear(ba_t* barray)
 {
   if (barray == NULL)
     return;
+  free(barray->bytes);
+  barray->bytes = NULL;
   barray->size = 0;
+  barray->alloc = 0;
 }
 
 ba_t* ba_app(ba_t* barray, const void* bytes, size_t size)

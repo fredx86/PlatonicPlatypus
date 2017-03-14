@@ -8,7 +8,7 @@ pk_t* pk_create(const void* bytes, size_t size)
     return (NULL);
   if ((packet->content = ba_create(bytes, size)) == NULL)
     return (NULL);
-  pk_ptr_clear(packet);
+  pk_ptr_reset(packet);
   return (packet);
 }
 
@@ -17,10 +17,10 @@ void pk_clear(pk_t* packet)
   if (packet == NULL)
     return;
   ba_clear(packet->content);
-  pk_ptr_clear(packet);
+  pk_ptr_reset(packet);
 }
 
-void pk_ptr_clear(pk_t* packet)
+void pk_ptr_reset(pk_t* packet)
 {
   if (packet != NULL)
     packet->ptr = packet->content->bytes;
@@ -109,6 +109,12 @@ size_t pk_buflen(pk_t* packet)
 {
   if (packet == NULL)
     return (0);
+  if (packet->ptr == NULL)
+  {
+    pk_ptr_reset(packet);
+    if (packet->ptr == NULL)
+      return (0);
+  }
   return (packet->content->size - (packet->ptr - packet->content->bytes));
 }
 

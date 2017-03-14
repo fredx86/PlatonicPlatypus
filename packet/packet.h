@@ -15,7 +15,7 @@ typedef struct s_packet
 pk_t* pk_create(const void*, size_t);
 
 void pk_clear(pk_t*);
-void pk_ptr_clear(pk_t*);
+void pk_ptr_reset(pk_t*);
 pk_t* pk_app(pk_t*, const void*, size_t);
 pk_t* pk_i8(pk_t*, uint8_t);
 pk_t* pk_i16(pk_t*, uint16_t);
