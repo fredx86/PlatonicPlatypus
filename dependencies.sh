@@ -5,7 +5,7 @@ DEPENDENCIES=(["packet"]="bytearray" ["hashmap"]="linkedlist")
 
 get_dependencies()
 {
-    DIRS=$(echo "${DEPENDENCIES[$1]}")
+    DIRS=${DEPENDENCIES[$1]}
     if [ "$DIRS" ]; then
 	for DIR in $DIRS; do
 	    cp "$DIR"/*.* "$1" || return 1
