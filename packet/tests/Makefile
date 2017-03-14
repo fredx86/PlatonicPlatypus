@@ -1,4 +1,5 @@
 SRCS	=	 unit.c		\
+		../packet.c	\
 		../barray.c	\
 		../byte_utils.c
 
