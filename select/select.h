@@ -2,11 +2,8 @@
 #define SELECT_H_
 
 #include "llist.h"
+#include "socket.h"
 #include "time_utils.h"
-#include <sys/select.h>
-
-//TODO Temp sock
-typedef int sock_t;
 
 typedef enum e_select_type
 {

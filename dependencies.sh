@@ -1,15 +1,16 @@
 #!/bin/bash
 
 declare -A DEPENDENCIES
-DEPENDENCIES=(["bytearray"]="utils" ["hashmap"]="linkedlist" ["packet"]="bytearray" ["select"]="linkedlist utils")
+DEPENDENCIES=(["bytearray"]="utils" ["hashmap"]="linkedlist" ["packet"]="bytearray" ["select"]="utils linkedlist socket" ["tcpserver"]="select packet")
 
 get_dependencies()
 {
+  DIR=""
   DIRS=${DEPENDENCIES[$1]}
   if [ "$DIRS" ]; then
     for DIR in $DIRS; do
-      info "Resolving dependencies from $DIR"
       cp "$DIR"/*.* "$1" || return 1
+      info "Resolving dependencies from $DIR"
       get_dependencies "$DIR"
     done
   fi
