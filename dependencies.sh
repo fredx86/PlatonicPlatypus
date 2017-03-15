@@ -1,19 +1,57 @@
 #!/bin/bash
 
-declare -A DEPENDENCIES
-DEPENDENCIES=(["bytearray"]="utils" ["hashmap"]="linkedlist" ["packet"]="bytearray" ["select"]="utils linkedlist socket" ["tcpserver"]="select packet")
+DEPENDENCY_FILE="config.dat"
 
-get_dependencies()
+get_files()
 {
-  DIR=""
-  DIRS=${DEPENDENCIES[$1]}
-  if [ "$DIRS" ]; then
-    for DIR in $DIRS; do
-      cp "$DIR"/*.* "$1" || return 1
-      info "Resolving dependencies from $DIR"
-      get_dependencies "$DIR"
-    done
+  ls -l "$1" | grep ^- | tr -s ' ' | cut -d ' ' -f 9
+}
+
+dependency_keys()
+{
+  while read LINE; do
+    echo "$LINE" | cut -d '=' -f 1
+  done < "$DEPENDENCY_FILE"
+}
+
+get_dependency()
+{
+  while read LINE; do
+    KEY=$(echo "$LINE" | cut -d '=' -f 1)
+    if [ "$KEY" == "$1" ]; then
+      echo "$LINE" | cut -d '=' -f 2 ; return
+    fi
+  done < "$DEPENDENCY_FILE"
+}
+
+add_dependencies()
+{
+  DIRS=$(get_dependency "$1")
+  if [ ! "$DIRS" ]; then
+    return 0
   fi
+  for DIR in $DIRS; do
+    info "Resolving dependencies from $DIR"
+    cp "$DIR"/*.* "$2" || return 1
+    add_dependencies "$DIR" "$2"
+  done
+  return 0
+}
+
+clean_dependencies()
+{
+  DIRS=$(get_dependency "$1")
+  if [ ! "$DIRS" ]; then
+    return 0
+  fi
+  for DIR in $DIRS; do
+    info "Removing dependencies from $DIR"
+    FILES=$(get_files "$DIR")
+    for FILE in $FILES; do
+      rm -f "$2/$FILE"
+    done
+    clean_dependencies "$DIR" "$2"
+  done
   return 0
 }
 
@@ -41,14 +79,25 @@ if [ ! $1 ]; then
   echo "Usage: $0 <module - directory>" > /dev/stderr
   exit 1
 fi
+
 if [ $1 == "--help" ]; then
   echo "Resolve dependencies and run unit tests for module given in parameter"
   echo -e "\tExample: '\$>$0 packet'"
   exit 0
 fi
+
+if [ $1 == "--clean" ]; then
+  while read LINE; do
+    KEY=$(echo "$LINE" | cut -d '=' -f 1)
+    clean_dependencies "$KEY" "$KEY"
+  done < "$DEPENDENCY_FILE"
+  info "Cleaning done"
+  exit 0
+fi
+
 TARGET=${1%/}
 
-get_dependencies "$TARGET" || err "Failed to recover dependencies for $TARGET"
+add_dependencies "$TARGET" "$TARGET" || err "Failed to recover dependencies for $TARGET"
 run_tests "$TARGET" && BUILD=1
 if [ $BUILD ]; then
   info "Build OK for $TARGET"
