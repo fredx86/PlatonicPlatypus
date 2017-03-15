@@ -86,6 +86,7 @@ fi
 
 TARGET=${1%/}
 
+test -d "$TARGET" || err "Module $TARGET does not exists"
 add_dependencies "$TARGET" "$TARGET" || err "Failed to recover dependencies for $TARGET"
 run_tests "$TARGET" && BUILD=1
 if [ $BUILD ]; then
