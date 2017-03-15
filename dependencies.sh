@@ -7,13 +7,6 @@ get_files()
   ls -l "$1" | grep ^- | tr -s ' ' | cut -d ' ' -f 9
 }
 
-dependency_keys()
-{
-  while read LINE; do
-    echo "$LINE" | cut -d '=' -f 1
-  done < "$DEPENDENCY_FILE"
-}
-
 get_dependency()
 {
   while read LINE; do
