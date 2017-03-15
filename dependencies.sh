@@ -7,11 +7,11 @@ get_dependencies()
 {
   DIRS=${DEPENDENCIES[$1]}
   if [ "$DIRS" ]; then
-	for DIR in $DIRS; do
-    info "Resolving dependencies from $DIR"
-    cp "$DIR"/*.* "$1" || return 1
-    get_dependencies "$DIR"
-	done
+    for DIR in $DIRS; do
+      info "Resolving dependencies from $DIR"
+      cp "$DIR"/*.* "$1" || return 1
+      get_dependencies "$DIR"
+    done
   fi
   return 0
 }
