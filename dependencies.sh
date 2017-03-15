@@ -38,7 +38,6 @@ clean_dependencies()
     return 0
   fi
   for DIR in $DIRS; do
-    info "Removing dependencies from $DIR"
     FILES=$(get_files "$DIR")
     for FILE in $FILES; do
       rm -f "$2/$FILE"
@@ -78,6 +77,7 @@ fi
 if [ $1 == "--clean" ]; then
   while read LINE; do
     KEY=$(echo "$LINE" | cut -d '=' -f 1)
+    info "Removing dependencies from $KEY"
     clean_dependencies "$KEY" "$KEY"
   done < "$DEPENDENCY_FILE"
   info "Cleaning done"
