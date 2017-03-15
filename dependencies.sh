@@ -1,7 +1,7 @@
 #!/bin/bash
 
 declare -A DEPENDENCIES
-DEPENDENCIES=(["packet"]="bytearray" ["hashmap"]="linkedlist")
+DEPENDENCIES=(["packet"]="bytearray" ["hashmap"]="linkedlist" ["select"]="linkedlist")
 
 get_dependencies()
 {
