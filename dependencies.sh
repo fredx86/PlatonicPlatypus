@@ -68,15 +68,11 @@ info()
   echo -e "[\e[32mINFO\e[0m] $1"
 }
 
-if [ ! $1 ]; then
-  echo "Usage: $0 <module - directory>" > /dev/stderr
+if [ ! $1 ] || [ $1 == "--help" ]; then
+  echo "Usage: $0 <module> | --clean" > /dev/stderr
+  echo -e "\tmodule\t\tResolve dependencies and run unit tests for module" > /dev/stderr
+  echo -e "\t--clean\t\tClean all dependencies" > /dev/stderr
   exit 1
-fi
-
-if [ $1 == "--help" ]; then
-  echo "Resolve dependencies and run unit tests for module given in parameter"
-  echo -e "\tExample: '\$>$0 packet'"
-  exit 0
 fi
 
 if [ $1 == "--clean" ]; then
