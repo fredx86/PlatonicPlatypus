@@ -1,5 +1,5 @@
-bytearray=utils
+bytearray=byteutils
 hashmap=linkedlist
 packet=bytearray
-select=utils linkedlist socket
+select=linkedlist socket timeutils
 tcpserver=select packet
