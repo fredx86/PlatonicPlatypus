@@ -8,9 +8,27 @@ ts_t* ts_create(int ai_family, uint16_t port)
     return (NULL);
   if ((ts->clients = ll_create()) == NULL)
     return (NULL);
+  if ((ts->select = sl_create()) == NULL)
+    return (NULL);
   if (!ts_init_socket(&ts->server, ai_family, port))
     return (NULL);
+  if (sl_add(ts->select, SL_READ, ts->server.sock) == NULL)
+    return (NULL);
   return (ts);
+}
+
+ts_t* ts_update(ts_t* server, float seconds)
+{
+  int update;
+
+  if (server == NULL)
+    return (NULL);
+  if ((update = sl_update(server->select, seconds)) == -1)
+    return (NULL);
+  if (update == 0)
+    return (server);
+  //TODO
+  return (server);
 }
 
 void ts_destroy(ts_t* server)

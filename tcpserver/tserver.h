@@ -6,12 +6,19 @@
 #include "packet.h"
 #include "socket.h"
 
+typedef struct s_tcp_server ts_t;
+typedef uint32_t (*rcvd_packet_f)(ts_t*, void* client, pk_t*);
+/*
+typedef void (*on_connect_f)(ts_t*, sock_t);
+typedef void (*on_disconnect_f)(ts_t*, sock_t);
+*/
+
 typedef struct s_tcp_server_client
 {
   sk_t socket;
   pk_t* inbound;
   pk_t* outbound;
-  char state; //TODO Handle differents protocol using state ?
+  void* client;
 } ts_client_t;
 
 typedef struct s_tcp_server
@@ -19,6 +26,8 @@ typedef struct s_tcp_server
   sl_t* select;
   ll_head_t* clients; /* List of ts_client_t */
   sk_t server;
+  //Maybe in a struct ?
+  rcvd_packet_f on_rcvd;
 } ts_t;
 
 ts_t* ts_create(int ai_family, uint16_t port);
