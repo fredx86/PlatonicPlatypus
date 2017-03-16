@@ -20,6 +20,8 @@ ts_t* ts_create(int ai_family, uint16_t port)
 ts_t* ts_update(ts_t* server, float seconds)
 {
   int update;
+  ll_t* tmp;
+  sl_sock_t* s;
 
   if (server == NULL)
     return (NULL);
@@ -27,6 +29,20 @@ ts_t* ts_update(ts_t* server, float seconds)
     return (NULL);
   if (update == 0)
     return (server);
+  tmp = server->select->fds->begin;
+  while (tmp)
+  {
+    s = tmp->elem;
+    if (FD_ISSET(s->sock, &server->select->readfs))
+    {
+      //TODO
+    }
+    if (FD_ISSET(s->sock, &server->select->writefs))
+    {
+      //TODO
+    }
+    tmp = tmp->next;
+  }
   //TODO
   return (server);
 }

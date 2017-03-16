@@ -18,11 +18,11 @@ int sl_update(sl_t* slct, float seconds)
 
   if (slct == NULL)
     return (-1);
-  FD_ZERO(&slct->set[0]);
-  FD_ZERO(&slct->set[1]);
+  FD_ZERO(&slct->readfs);
+  FD_ZERO(&slct->writefs);
   nfds = sl_set_fds(slct);
   time_from_seconds(&timeout, seconds);
-  return (select(nfds + 1, &slct->set[0], &slct->set[1], NULL, &timeout));
+  return (select(nfds + 1, &slct->readfs, &slct->writefs, NULL, &timeout));
 }
 
 sl_t* sl_add(sl_t* slct, sl_type_t type, sock_t sock)
@@ -116,12 +116,12 @@ int sl_set_fdset(sl_t* slct, sl_sock_t* sl_sock)
 
   if (sl_sock->type & SL_READ)
   {
-    FD_SET(sl_sock->sock, &slct->set[0]);
+    FD_SET(sl_sock->sock, &slct->readfs);
     is_set = 1;
   }
   if (sl_sock->type & SL_WRITE)
   {
-    FD_SET(sl_sock->sock, &slct->set[1]);
+    FD_SET(sl_sock->sock, &slct->writefs);
     is_set = 1;
   }
   return (is_set);

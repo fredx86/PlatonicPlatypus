@@ -20,7 +20,8 @@ typedef struct s_select_fd
 typedef struct s_select
 {
   ll_head_t* fds; /* List of sl_sock_t */
-  fd_set set[2];
+  fd_set readfs;
+  fd_set writefs;
 } sl_t;
 
 sl_t* sl_create();
