@@ -16,7 +16,7 @@ enum e_ts_event
 typedef struct s_ts_event
 {
   enum e_ts_event type;
-  ts_client_t* client;
+  sock_t sock_id;
   pk_t* packet;
 } ts_event_t;
 
