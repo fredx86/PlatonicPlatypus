@@ -34,10 +34,12 @@ ts_event_t* ts_poll(ts_t*);
 
 //ts_t* ts_send(ts_t*, sock_t, pk_t*);
 //ts_t* ts_send_all(ts_t*, pk_t*);
-//ts_t* ts_remove(ts_t*, sock_t);
+void ts_remove(ts_t*, sock_t);
 
+//void ts_event_destroy(ts_event_t*);
 void ts_destroy(ts_t*);
 
+ll_t* ts_get_node(ts_t*, sock_t);
 ts_client_t* ts_get_client(ts_t*, sock_t);
 ts_client_t* ts_make_client(sk_t*);
 

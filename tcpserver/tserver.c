@@ -57,9 +57,26 @@ ts_event_t* ts_poll(ts_t* server)
 {
   if (server == NULL)
     return (NULL);
-  if (ll_empty(server->events) != 0)
+  if (ll_empty(server->events) <= 0)
     return (NULL);
   return (ll_pop(server->events));
+}
+
+void ts_remove(ts_t* server, sock_t sock_id)
+{
+  ll_t* node;
+  ts_client_t* client;
+
+  if (server == NULL)
+    return;
+  if ((node = ts_get_node(server, sock_id)) == NULL)
+    return;
+  client = node->elem;
+  sl_remove_sock(server->select, sock_id);
+  sk_close(&client->socket);
+  pk_destroy(client->inbound);
+  pk_destroy(client->outbound);
+  ll_erase(node);
 }
 
 void ts_destroy(ts_t* server)
@@ -70,18 +87,29 @@ void ts_destroy(ts_t* server)
   free(server);
 }
 
-ts_client_t* ts_get_client(ts_t* server, sock_t sock_id)
+ll_t* ts_get_node(ts_t* server, sock_t sock_id)
 {
   ll_t* tmp;
 
+  if (server == NULL)
+    return (NULL);
   tmp = server->clients->begin;
   while (tmp)
   {
     if (((ts_client_t*)tmp->elem)->socket.sock == sock_id)
-      return (tmp->elem);
+      return (tmp);
     tmp = tmp->next;
   }
   return (NULL);
+}
+
+ts_client_t* ts_get_client(ts_t* server, sock_t sock_id)
+{
+  ll_t* tmp;
+
+  if ((tmp = ts_get_node(server, sock_id)) == NULL)
+    return (NULL);
+  return (tmp->elem);
 }
 
 ts_client_t* ts_make_client(sk_t* socket)
