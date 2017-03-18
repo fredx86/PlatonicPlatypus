@@ -154,6 +154,15 @@ int ts_read(ts_t* server, sock_t sock_id)
   return (ts_read_client(server, client) == NULL ? 0 : 1);
 }
 
+int ts_write(ts_t* server, sock_t sock_id)
+{
+  ts_client_t* client;
+
+  if ((client = ts_get_client(server, sock_id)) == NULL)
+    return (1);
+  return (ts_write_client(server, client) == NULL ? 0 : 1);
+}
+
 ts_client_t* ts_accept(ts_t* server)
 {
   sk_t socket;
@@ -190,6 +199,24 @@ ts_client_t* ts_read_client(ts_t* server, ts_client_t* client)
         return (NULL);
       pk_erase(client->inbound, 0, pk_size);
     }
+  }
+  else
+  {
+    ts_remove(server, client->socket.sock);
+  }
+  return (client);
+}
+
+ts_client_t* ts_write_client(ts_t* server, ts_client_t* client)
+{
+  ssize_t sent;
+
+  if ((sent = send(client->socket.sock, client->outbound->content->bytes, \
+    client->outbound->content->size, 0)) > 0)
+  {
+    if ((size_t)sent == client->outbound->content->size) //If all data were send
+      sl_remove(server->select, SL_WRITE, client->socket.sock);
+    pk_erase(client->outbound, 0, sent);
   }
   else
   {

@@ -46,9 +46,10 @@ ts_client_t* ts_get_client(ts_t*, sock_t);
 ts_client_t* ts_make_client(sk_t*);
 
 int ts_read(ts_t*, sock_t);
-//int ts_write(ts_t*, sock_t);
+int ts_write(ts_t*, sock_t);
 ts_client_t* ts_accept(ts_t*);
 ts_client_t* ts_read_client(ts_t*, ts_client_t*);
+ts_client_t* ts_write_client(ts_t*, ts_client_t*);
 
 int ts_init_socket(sk_t*, int ai_family, uint16_t port);
 int ts_bind_socket(sk_t*, struct addrinfo*);
