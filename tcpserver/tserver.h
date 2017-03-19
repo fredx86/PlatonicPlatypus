@@ -29,27 +29,24 @@ typedef struct s_tcp_server
 
 ts_t* ts_create(int ai_family, uint16_t port, ts_packet_f on_rcvd);
 
-//ts_t* ts_update(ts_t*, float seconds);
+ts_t* ts_update(ts_t*, float seconds);
 ts_event_t* ts_poll(ts_t*);
 
 //ts_t* ts_send(ts_t*, sock_t, pk_t*);
 //ts_t* ts_send_all(ts_t*, pk_t*);
-void ts_remove(ts_t*, sock_t);
+void ts_remove(ts_t*, sock_t, char);
 
-//void ts_event_destroy(ts_event_t*);
+void ts_event_destroy(ts_event_t*);
 void ts_destroy(ts_t*);
-
-ts_event_t* ts_add_event(ts_t*, enum e_ts_event, sock_t);
 
 ll_t* ts_get_node(ts_t*, sock_t);
 ts_client_t* ts_get_client(ts_t*, sock_t);
 ts_client_t* ts_make_client(sk_t*);
+ts_event_t* ts_make_event(ts_t*, enum e_ts_event, sock_t);
 
-int ts_read(ts_t*, sock_t);
-int ts_write(ts_t*, sock_t);
 ts_client_t* ts_accept(ts_t*);
-ts_client_t* ts_read_client(ts_t*, ts_client_t*);
-ts_client_t* ts_write_client(ts_t*, ts_client_t*);
+ts_client_t* ts_read(ts_t*, ts_client_t*);
+ts_client_t* ts_write(ts_t*, ts_client_t*);
 
 int ts_init_socket(sk_t*, int ai_family, uint16_t port);
 int ts_bind_socket(sk_t*, struct addrinfo*);

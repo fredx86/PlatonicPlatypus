@@ -22,9 +22,9 @@ ts_t* ts_create(int ai_family, uint16_t port, ts_packet_f on_rcvd)
 
 ts_t* ts_update(ts_t* server, float seconds)
 {
-  int update;
   ll_t* tmp;
-  sl_sock_t* s;
+  int update;
+  ts_client_t* client;
 
   if (server == NULL)
     return (NULL);
@@ -32,20 +32,26 @@ ts_t* ts_update(ts_t* server, float seconds)
     return (NULL);
   if (update == 0) //On timeout
     return (server);
-  tmp = server->select->fds->begin;
+  if (FD_ISSET(server->socket.sock, &server->select->readfs))
+  {
+    if (ts_accept(server) == NULL)
+      return (NULL);
+  }
+  tmp = server->clients->begin;
   while (tmp)
   {
-    s = tmp->elem;
-    if (FD_ISSET(s->sock, &server->select->readfs))
+    client = tmp->elem;
+    tmp = tmp->next;
+    if (FD_ISSET(client->socket.sock, &server->select->readfs))
     {
-      if (ts_read(server, s->sock) == 0)
+      if (ts_read(server, client) == NULL)
         return (NULL);
     }
-    if (FD_ISSET(s->sock, &server->select->writefs))
+    if (FD_ISSET(client->socket.sock, &server->select->writefs))
     {
-      //TODO
+      if (ts_write(server, client) == NULL)
+        return (NULL);
     }
-    tmp = tmp->next;
   }
   return (server);
 }
@@ -54,12 +60,10 @@ ts_event_t* ts_poll(ts_t* server)
 {
   if (server == NULL)
     return (NULL);
-  if (ll_empty(server->events) <= 0)
-    return (NULL);
   return (ll_pop(server->events));
 }
 
-void ts_remove(ts_t* server, sock_t sock_id)
+void ts_remove(ts_t* server, sock_t sock_id, char send_event)
 {
   ll_t* node;
   ts_client_t* client;
@@ -74,7 +78,17 @@ void ts_remove(ts_t* server, sock_t sock_id)
   pk_destroy(client->inbound);
   pk_destroy(client->outbound);
   ll_erase(node);
-  ts_add_event(server, TS_DISCONNECT, sock_id);
+  if (send_event)
+  {
+    ts_make_event(server, TS_DISCONNECT, sock_id);
+  }
+}
+
+void ts_event_destroy(ts_event_t* event)
+{
+  if (event == NULL)
+    return;
+  pk_destroy(event->packet);
 }
 
 void ts_destroy(ts_t* server)
@@ -83,20 +97,6 @@ void ts_destroy(ts_t* server)
     return;
   //TODO Remove clients
   free(server);
-}
-
-ts_event_t* ts_add_event(ts_t* server, enum e_ts_event e, sock_t sock_id)
-{
-  ts_event_t* event;
-
-  if ((event = malloc(sizeof(*event))) == NULL)
-    return (NULL);
-  event->type = e;
-  event->sock_id = sock_id;
-  event->packet = NULL;
-  if (ll_push_front(server->events, event) == NULL)
-    return (NULL);
-  return (event);
 }
 
 ll_t* ts_get_node(ts_t* server, sock_t sock_id)
@@ -139,28 +139,18 @@ ts_client_t* ts_make_client(sk_t* socket)
   return (client);
 }
 
-int ts_read(ts_t* server, sock_t sock_id)
+ts_event_t* ts_make_event(ts_t* server, enum e_ts_event e, sock_t sock_id)
 {
-  ts_client_t* client;
+  ts_event_t* event;
 
-  if (server->socket.sock == sock_id)
-  {
-    if (ts_accept(server) == NULL)
-      return (0);
-    return (1);
-  }
-  if ((client = ts_get_client(server, sock_id)) == NULL)
-    return (1);
-  return (ts_read_client(server, client) == NULL ? 0 : 1);
-}
-
-int ts_write(ts_t* server, sock_t sock_id)
-{
-  ts_client_t* client;
-
-  if ((client = ts_get_client(server, sock_id)) == NULL)
-    return (1);
-  return (ts_write_client(server, client) == NULL ? 0 : 1);
+  if ((event = malloc(sizeof(*event))) == NULL)
+    return (NULL);
+  event->type = e;
+  event->sock_id = sock_id;
+  event->packet = NULL;
+  if (ll_push_front(server->events, event) == NULL)
+    return (NULL);
+  return (event);
 }
 
 ts_client_t* ts_accept(ts_t* server)
@@ -168,6 +158,7 @@ ts_client_t* ts_accept(ts_t* server)
   sk_t socket;
   ts_client_t* client;
 
+  socket.addr_size = sizeof(socket.addr);
   socket.sock = accept(server->socket.sock, (struct sockaddr*)&socket.addr, &socket.addr_size);
   if (socket.sock == INVALID_SOCKET)
     return (NULL);
@@ -175,12 +166,14 @@ ts_client_t* ts_accept(ts_t* server)
     return (NULL);
   if (ll_push_back(server->clients, client) == NULL)
     return (NULL);
-  if (ts_add_event(server, TS_CONNECT, socket.sock) == NULL)
+  if (sl_add(server->select, SL_READ, socket.sock) == NULL)
+    return (NULL);
+  if (ts_make_event(server, TS_CONNECT, socket.sock) == NULL)
     return (NULL);
   return (client);
 }
 
-ts_client_t* ts_read_client(ts_t* server, ts_client_t* client)
+ts_client_t* ts_read(ts_t* server, ts_client_t* client)
 {
   char buf[1024];
   ssize_t received;
@@ -193,7 +186,7 @@ ts_client_t* ts_read_client(ts_t* server, ts_client_t* client)
       return (NULL);
     while ((pk_size = server->on_rcvd(client->inbound->content, client->status)) > 0)
     {
-      if ((event = ts_add_event(server, TS_PACKET, client->socket.sock)) == NULL)
+      if ((event = ts_make_event(server, TS_PACKET, client->socket.sock)) == NULL)
         return (NULL);
       if ((event->packet = pk_create(client->inbound->content->bytes, pk_size)) == NULL)
         return (NULL);
@@ -202,12 +195,12 @@ ts_client_t* ts_read_client(ts_t* server, ts_client_t* client)
   }
   else
   {
-    ts_remove(server, client->socket.sock);
+    ts_remove(server, client->socket.sock, 1);
   }
   return (client);
 }
 
-ts_client_t* ts_write_client(ts_t* server, ts_client_t* client)
+ts_client_t* ts_write(ts_t* server, ts_client_t* client)
 {
   ssize_t sent;
 
@@ -220,7 +213,7 @@ ts_client_t* ts_write_client(ts_t* server, ts_client_t* client)
   }
   else
   {
-    ts_remove(server, client->socket.sock);
+    ts_remove(server, client->socket.sock, 1);
   }
   return (client);
 }

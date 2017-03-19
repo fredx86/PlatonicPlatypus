@@ -63,7 +63,7 @@ ba_t* ba_erase(ba_t* barray, size_t pos, size_t len)
 {
   if (barray == NULL || pos + len > barray->size)
     return (NULL);
-  memmove(barray->bytes + pos, barray->bytes + pos + len, barray->size - pos + len);
+  memmove(barray->bytes + pos, barray->bytes + pos + len, barray->size - (pos + len));
   barray->size -= len;
   return (barray);
 }
