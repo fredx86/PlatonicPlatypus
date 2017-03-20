@@ -62,6 +62,7 @@ sl_t* sl_remove_sock(sl_t* slct, sock_t sock)
     return (NULL);
   if ((node = sl_get_node(slct, sock)) == NULL)
     return (slct);
+  free(node->elem);
   ll_erase(node);
   return (slct);
 }

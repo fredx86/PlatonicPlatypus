@@ -11,7 +11,7 @@ typedef enum e_select_type
   SL_WRITE  = 2
 } sl_type_t;
 
-typedef struct s_select_fd
+typedef struct s_select_sock
 {
   sock_t sock;
   sl_type_t type;

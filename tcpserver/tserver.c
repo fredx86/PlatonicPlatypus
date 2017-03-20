@@ -42,16 +42,8 @@ ts_t* ts_update(ts_t* server, float seconds)
   {
     client = tmp->elem;
     tmp = tmp->next;
-    if (FD_ISSET(client->socket.sock, &server->select->readfs))
-    {
-      if (ts_read(server, client) == NULL)
-        return (NULL);
-    }
-    if (FD_ISSET(client->socket.sock, &server->select->writefs))
-    {
-      if (ts_write(server, client) == NULL)
-        return (NULL);
-    }
+    if (ts_update_client(server, client) == NULL)
+      return (NULL);
   }
   return (server);
 }
@@ -63,25 +55,72 @@ ts_event_t* ts_poll(ts_t* server)
   return (ll_pop(server->events));
 }
 
+ts_t* ts_send(ts_t* server, sock_t sock_id, const ba_t* array)
+{
+  ts_client_t* client;
+
+  if (server == NULL)
+    return (NULL);
+  if ((client = ts_get_client(server, sock_id)) == NULL)
+    return (server);
+  return (ts_send_client(server, client, array));
+}
+
+ts_t* ts_send_client(ts_t* server, ts_client_t* client, const ba_t* array)
+{
+  if (server == NULL)
+    return (NULL);
+  if (sl_add(server->select, SL_WRITE, client->socket.sock) == NULL)
+    return (NULL);
+  if (ba_app(client->outbound, array->bytes, array->size) == NULL)
+    return (NULL);
+  return (server);
+}
+
+ts_t* ts_send_all(ts_t* server, const ba_t* array)
+{
+  ll_t* tmp;
+
+  if (server == NULL)
+    return (NULL);
+  tmp = server->clients->begin;
+  while (tmp)
+  {
+    if (ts_send_client(server, tmp->elem, array) == NULL)
+      return (NULL);
+    tmp = tmp->next;
+  }
+  return (server);
+}
+
 void ts_remove(ts_t* server, sock_t sock_id, char send_event)
 {
   ll_t* node;
-  ts_client_t* client;
 
   if (server == NULL)
     return;
   if ((node = ts_get_node(server, sock_id)) == NULL)
     return;
-  client = node->elem;
+  ts_remove_client(server, node->elem, send_event);
+  ll_erase(node);
+}
+
+void ts_remove_client(ts_t* server, ts_client_t* client, char send_event)
+{
+  sock_t sock_id;
+
+  if (server == NULL || client == NULL)
+    return;
+  sock_id = client->socket.sock;
   sl_remove_sock(server->select, sock_id);
   sk_close(&client->socket);
-  pk_destroy(client->inbound);
-  pk_destroy(client->outbound);
-  ll_erase(node);
+  ba_destroy(client->inbound);
+  ba_destroy(client->outbound);
   if (send_event)
   {
     ts_make_event(server, TS_DISCONNECT, sock_id);
   }
+  free(client);
 }
 
 void ts_event_destroy(ts_event_t* event)
@@ -89,14 +128,45 @@ void ts_event_destroy(ts_event_t* event)
   if (event == NULL)
     return;
   pk_destroy(event->packet);
+  free(event);
 }
 
 void ts_destroy(ts_t* server)
 {
   if (server == NULL)
     return;
-  //TODO Remove clients
+  while (ll_empty(server->clients) == 0)
+  {
+    ts_remove_client(server, ll_pop(server->clients), 0);
+  }
+  ll_destroy(server->clients);
+  while (ll_empty(server->events) == 0)
+  {
+    ts_event_destroy(ll_pop(server->events));
+  }
+  ll_destroy(server->events);
+  sl_destroy(server->select);
+  sk_close(&server->socket);
   free(server);
+}
+
+ts_t* ts_update_client(ts_t* server, ts_client_t* client)
+{
+  char should_remove = 0;
+
+  if (FD_ISSET(client->socket.sock, &server->select->readfs))
+  {
+    if (ts_read(server, client, &should_remove) == NULL)
+      return (NULL);
+  }
+  if (FD_ISSET(client->socket.sock, &server->select->writefs))
+  {
+    if (ts_write(server, client, &should_remove) == NULL)
+      return (NULL);
+  }
+  if (should_remove)
+    ts_remove(server, client->socket.sock, 1);
+  return (server);
 }
 
 ll_t* ts_get_node(ts_t* server, sock_t sock_id)
@@ -131,9 +201,9 @@ ts_client_t* ts_make_client(sk_t* socket)
   if ((client = malloc(sizeof(*client))) == NULL)
     return (NULL);
   memcpy(&client->socket, socket, sizeof(*socket));
-  if ((client->inbound = pk_create(NULL, 0)) == NULL)
+  if ((client->inbound = ba_create(NULL, 0)) == NULL)
     return (NULL);
-  if ((client->outbound = pk_create(NULL, 0)) == NULL)
+  if ((client->outbound = ba_create(NULL, 0)) == NULL)
     return (NULL);
   client->status = 0;
   return (client);
@@ -173,7 +243,7 @@ ts_client_t* ts_accept(ts_t* server)
   return (client);
 }
 
-ts_client_t* ts_read(ts_t* server, ts_client_t* client)
+ts_client_t* ts_read(ts_t* server, ts_client_t* client, char* should_remove)
 {
   char buf[1024];
   ssize_t received;
@@ -182,38 +252,38 @@ ts_client_t* ts_read(ts_t* server, ts_client_t* client)
 
   if ((received = recv(client->socket.sock, buf, 1024, 0)) > 0)
   {
-    if (pk_app(client->inbound, buf, received) == NULL)
+    if (ba_app(client->inbound, buf, received) == NULL)
       return (NULL);
-    while ((pk_size = server->on_rcvd(client->inbound->content, client->status)) > 0)
+    while ((pk_size = server->on_rcvd(client->inbound, client->status)) > 0)
     {
       if ((event = ts_make_event(server, TS_PACKET, client->socket.sock)) == NULL)
         return (NULL);
-      if ((event->packet = pk_create(client->inbound->content->bytes, pk_size)) == NULL)
+      if ((event->packet = pk_create(client->inbound->bytes, pk_size)) == NULL)
         return (NULL);
-      pk_erase(client->inbound, 0, pk_size);
+      ba_erase(client->inbound, 0, pk_size);
     }
   }
   else
   {
-    ts_remove(server, client->socket.sock, 1);
+    *should_remove = 1;
   }
   return (client);
 }
 
-ts_client_t* ts_write(ts_t* server, ts_client_t* client)
+ts_client_t* ts_write(ts_t* server, ts_client_t* client, char* should_remove)
 {
   ssize_t sent;
 
-  if ((sent = send(client->socket.sock, client->outbound->content->bytes, \
-    client->outbound->content->size, 0)) > 0)
+  if ((sent = send(client->socket.sock, client->outbound->bytes, \
+    client->outbound->size, 0)) > 0)
   {
-    if ((size_t)sent == client->outbound->content->size) //If all data were send
+    if ((size_t)sent == client->outbound->size) //If all data were send
       sl_remove(server->select, SL_WRITE, client->socket.sock);
-    pk_erase(client->outbound, 0, sent);
+    ba_erase(client->outbound, 0, sent);
   }
   else
   {
-    ts_remove(server, client->socket.sock, 1);
+    *should_remove = 1;
   }
   return (client);
 }
