@@ -19,6 +19,20 @@ char* str_consume(char* str, str_ctype_f contains)
   return (&str[i]);
 }
 
+char* str_lower(char* str)
+{
+  for (int i = 0; str[i]; ++i)
+    str[i] = tolower(str[i]);
+  return (str);
+}
+
+char* str_upper(char* str)
+{
+  for (int i = 0; str[i]; ++i)
+    str[i] = toupper(str[i]);
+  return (str);
+}
+
 char* str_trim(char* str)
 {
   int starts = 0;

@@ -10,8 +10,14 @@ typedef int (*str_ctype_f)(int);
 int str_count(char*, char);
 char* str_consume(char*, str_ctype_f contains);
 
-char* str_trim(char*); /* trim() the string given in parameter. Not a copy ! */
-char* str_tokenize(char*, char); /* tokenize() the string given in parameter. Not a copy ! */
-char** str_split(char*, char, int* size); /* split() the string given in parameter, and fill the size pointer. Not a copy ! */
+/*
+  All function listed below transform the char* given in parameter
+  They DO NOT use and return a copy !
+*/
+char* str_lower(char*);
+char* str_upper(char*);
+char* str_trim(char*);
+char* str_tokenize(char*, char);
+char** str_split(char*, char, int* size);
 
 #endif
