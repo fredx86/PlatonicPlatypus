@@ -19,6 +19,18 @@ char* str_consume(char* str, str_ctype_f contains)
   return (&str[i]);
 }
 
+char* str_cpy_max(char* dest, const char* src, size_t max_len)
+{
+  size_t i = 0;
+  while (src[i] && i < max_len)
+  {
+    dest[i] = src[i];
+    ++i;
+  }
+  dest[i] = 0;
+  return (dest);
+}
+
 char* str_lower(char* str)
 {
   for (int i = 0; str[i]; ++i)

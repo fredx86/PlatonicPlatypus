@@ -11,6 +11,13 @@ int str_count(char*, char);
 char* str_consume(char*, str_ctype_f contains);
 
 /*
+  Copy src into dest until \0 OR if max_len is reached
+  Always add a \0 at the end of dest
+  Return dest
+*/
+char* str_cpy_max(char* dest, const char* src, size_t max_len);
+
+/*
   All function listed below transform the char* given in parameter
   They DO NOT use and return a copy !
 */
