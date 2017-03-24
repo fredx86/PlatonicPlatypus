@@ -48,12 +48,17 @@ char* str_upper(char* str)
 char* str_trim(char* str)
 {
   int starts = 0;
-  int ends = strlen(str) - 1;
+  int ends = strlen(str);
 
+  if (ends == 0)
+    return (str);
   while (isspace(str[starts]))
     ++starts;
-  while (isspace(str[ends]))
-    --ends;
+  if (starts != ends--)
+  {
+    while (isspace(str[ends]))
+      --ends;
+  }
   memmove(str, str + starts, ends);
   str[ends - starts + 1] = 0;
   return (str);
