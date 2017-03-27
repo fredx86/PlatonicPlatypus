@@ -7,13 +7,13 @@ ts_t* ts_create(int ai_family, uint16_t port, ts_packet_f on_rcvd)
   if (on_rcvd == NULL || (ts = malloc(sizeof(*ts))) == NULL)
     return (NULL);
   ts->on_rcvd = on_rcvd;
+  if (!ts_init_socket(&ts->socket, ai_family, port))
+    return (NULL);
   if ((ts->clients = ll_create()) == NULL)
     return (NULL);
   if ((ts->events = ll_create()) == NULL)
     return (NULL);
   if ((ts->select = sl_create()) == NULL)
-    return (NULL);
-  if (!ts_init_socket(&ts->socket, ai_family, port))
     return (NULL);
   if (sl_add(ts->select, SL_READ, ts->socket.sock) == NULL)
     return (NULL);
@@ -322,12 +322,12 @@ int ts_init_socket(sk_t* sk, int ai_family, uint16_t port)
 
 int ts_bind_socket(sk_t* socket, struct addrinfo* addrinfo)
 {
-  char reuse = 1;
+  int reuse = 1;
 
+  setsockopt(socket->sock, SOL_SOCKET, SO_REUSEADDR, &reuse, sizeof(reuse));
   if (bind(socket->sock, addrinfo->ai_addr, addrinfo->ai_addrlen) == SOCKET_ERROR)
     return (0);
   if (listen(socket->sock, SOMAXCONN) == SOCKET_ERROR)
     return (0);
-  setsockopt(socket->sock, SOL_SOCKET, SO_REUSEADDR, &reuse, sizeof(reuse));
   return (1);
 }
