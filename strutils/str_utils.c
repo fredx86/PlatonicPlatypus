@@ -1,6 +1,6 @@
 #include "str_utils.h"
 
-int str_count(char* str, char c)
+int str_count(const char* str, char c)
 {
   int count = 0;
   for (int i = 0; str[i]; ++i)
@@ -11,7 +11,7 @@ int str_count(char* str, char c)
   return (count);
 }
 
-int str_count_f(char* str, str_ctype_f contains)
+int str_count_f(const char* str, str_ctype_f contains)
 {
   int count = 0;
   for (int i = 0; str[i]; ++i)
