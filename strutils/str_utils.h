@@ -8,6 +8,7 @@
 typedef int (*str_ctype_f)(int);
 
 int str_count(char*, char);
+int str_count_f(char*, str_ctype_f contains);
 char* str_consume(char*, str_ctype_f contains);
 
 /*

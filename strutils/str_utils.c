@@ -11,6 +11,17 @@ int str_count(char* str, char c)
   return (count);
 }
 
+int str_count_f(char* str, str_ctype_f contains)
+{
+  int count = 0;
+  for (int i = 0; str[i]; ++i)
+  {
+    if (contains(str[i]))
+      ++count;
+  }
+  return (count);
+}
+
 char* str_consume(char* str, str_ctype_f contains)
 {
   int i = 0;
