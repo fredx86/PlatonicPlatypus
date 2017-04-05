@@ -19,7 +19,7 @@ get_dependency()
   done < "$DEPENDENCY_FILE"
 }
 
-# resolve the dependancies from a module
+# resolve the dependencies from a module
 # copy the needed files into the module directory
 resolve_dependencies()
 {
@@ -36,7 +36,7 @@ resolve_dependencies()
   return 0
 }
 
-# clean all dependancies from all modules
+# clean all dependencies from all modules
 clean_dependencies()
 {
   DIRS=$(get_dependency "$1")
