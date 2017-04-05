@@ -1,18 +1,15 @@
-SRCS	=	 unit.c		\
-		../packet.c	\
-		../barray.c	\
-		../byte_utils.c
+SRCS	=	unit.c
 
-OBJS	= $(SRCS:.c=.o)
+OBJS	=	$(SRCS:.c=.o)
 
-NAME	= unitary
+NAME	=	unitary
 
-CC	= gcc
+CC	=	gcc
 
-CFLAGS	= -Wall -Wextra -pedantic
+CFLAGS	=	-Wall -Wextra -pedantic
 
 all: $(OBJS)
-	$(CC) -o $(NAME) $(OBJS)
+	$(CC) -o $(NAME) $(OBJS) ../libpppa.a
 
 clean:
 	rm -f $(OBJS)

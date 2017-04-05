@@ -1,18 +1,15 @@
-SRCS	=	 unit.c		\
-		../select.c	\
-		../llist.c	\
-		../time_utils.c
+SRCS	=	unit.c
 
-OBJS	= $(SRCS:.c=.o)
+OBJS	=	$(SRCS:.c=.o)
 
-NAME	= unitary
+NAME	=	unitary
 
-CC	= gcc
+CC	=	gcc
 
-CFLAGS	= -Wall -Wextra -pedantic -g
+CFLAGS	=	-Wall -Wextra -pedantic
 
 all: $(OBJS)
-	$(CC) -o $(NAME) $(OBJS)
+	$(CC) -o $(NAME) $(OBJS) ../libppsl.a
 
 clean:
 	rm -f $(OBJS)

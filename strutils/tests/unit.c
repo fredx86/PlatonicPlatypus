@@ -1,5 +1,5 @@
 #include <assert.h>
-#include "../str_utils.h"
+#include "../strutils.h"
 
 int main()
 {

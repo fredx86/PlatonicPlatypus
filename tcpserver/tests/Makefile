@@ -1,23 +1,15 @@
-SRCS	=	 unit.c		\
-		../barray.c	\
-		../byte_utils.c	\
-		../llist.c	\
-		../packet.c	\
-		../select.c	\
-		../socket.c	\
-		../time_utils.c	\
-		../tserver.c
+SRCS	=	unit.c
 
-OBJS	= $(SRCS:.c=.o)
+OBJS	=	$(SRCS:.c=.o)
 
-NAME	= unitary
+NAME	=	unitary
 
-CC	= gcc
+CC	=	gcc
 
-CFLAGS	= -Wall -Wextra -pedantic
+CFLAGS	=	-Wall -Wextra -pedantic
 
 all: $(OBJS)
-	$(CC) -o $(NAME) $(OBJS)
+	$(CC) -o $(NAME) $(OBJS) ../libppts.a
 
 clean:
 	rm -f $(OBJS)

@@ -1,15 +1,18 @@
-SRCS	=	unit.c
+SRCS	=	barray.c	\
+		byteutils.c
 
 OBJS	=	$(SRCS:.c=.o)
 
-NAME	=	unitary
+NAME	=	libppba.a
 
 CC	=	gcc
 
 CFLAGS	=	-Wall -Wextra -pedantic
 
-all: $(OBJS)
-	$(CC) -o $(NAME) $(OBJS) ../libppsu.a
+all: $(NAME)
+
+$(NAME): $(OBJS)
+	ar rc $(NAME) $(OBJS)
 
 clean:
 	rm -f $(OBJS)

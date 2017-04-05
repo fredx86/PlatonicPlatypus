@@ -1,15 +1,19 @@
-SRCS	=	unit.c
+SRCS	=	packet.c	\
+		barray.c	\
+		byteutils.c
 
 OBJS	=	$(SRCS:.c=.o)
 
-NAME	=	unitary
+NAME	=	libpppa.a
 
 CC	=	gcc
 
 CFLAGS	=	-Wall -Wextra -pedantic
 
-all: $(OBJS)
-	$(CC) -o $(NAME) $(OBJS) ../libppsu.a
+all: $(NAME)
+
+$(NAME): $(OBJS)
+	ar rc $(NAME) $(OBJS)
 
 clean:
 	rm -f $(OBJS)

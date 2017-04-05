@@ -1,15 +1,20 @@
-SRCS	=	unit.c
+SRCS	=	select.c	\
+		llist.c		\
+		timeutils.c	\
+		socket.c
 
 OBJS	=	$(SRCS:.c=.o)
 
-NAME	=	unitary
+NAME	=	libppsl.a
 
 CC	=	gcc
 
 CFLAGS	=	-Wall -Wextra -pedantic
 
-all: $(OBJS)
-	$(CC) -o $(NAME) $(OBJS) ../libppsu.a
+all: $(NAME)
+
+$(NAME): $(OBJS)
+	ar rc $(NAME) $(OBJS)
 
 clean:
 	rm -f $(OBJS)

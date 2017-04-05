@@ -1,15 +1,17 @@
-SRCS	=	unit.c
+SRCS	=	strutils.c
 
 OBJS	=	$(SRCS:.c=.o)
 
-NAME	=	unitary
+NAME	=	libppsu.a
 
 CC	=	gcc
 
 CFLAGS	=	-Wall -Wextra -pedantic
 
-all: $(OBJS)
-	$(CC) -o $(NAME) $(OBJS) ../libppsu.a
+all: $(NAME)
+
+$(NAME): $(OBJS)
+	ar rc $(NAME) $(OBJS)
 
 clean:
 	rm -f $(OBJS)

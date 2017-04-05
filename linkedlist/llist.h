@@ -20,19 +20,27 @@ typedef struct s_llist
 
 ll_head_t* ll_create();
 
-ll_t* ll_swap(ll_t* dest, ll_t* src); /* Swap elem between src and dest. Return dest */
+/* Swap elem between src and dest. Return dest */
+ll_t* ll_swap(ll_t* dest, ll_t* src);
 
-void* ll_pop(ll_head_t*); /* Dequeue 1 node from beginning of the list. Return the elem field */
-ll_t* ll_push(ll_head_t*, ll_t* node, void*); /* Push an element into the list. If node is NULL, it pushes a node at the end */
+/* Dequeue 1 node from beginning of the list. Return the elem field */
+void* ll_pop(ll_head_t*);
+
+/* Push an element into the list. If node is NULL, it pushes a node at the end */
+ll_t* ll_push(ll_head_t*, ll_t* node, void*);
 ll_t* ll_push_node(ll_head_t*, ll_t* node, ll_t*);
 ll_t* ll_push_back(ll_head_t*, void*);
 ll_t* ll_push_front(ll_head_t*, void*);
-ll_t* ll_erase(ll_t*); /* Erase the given node. Return the next node in case of iteration */
 
-int ll_empty(const ll_head_t*); /* Return -1 on error, 0 if NOT empty, 1 if empty */
+/* Erase the given node. Return the next node in case of iteration */
+ll_t* ll_erase(ll_t*);
+
+/* Return -1 on error, 0 if NOT empty, 1 if empty */
+int ll_empty(const ll_head_t*);
 
 void ll_destroy(ll_head_t*);
 
-ll_t* ll_make_node(ll_head_t*, void*); /* Create a new node and set elem and head fields */
+/* Create a new node and set elem and head fields */
+ll_t* ll_make_node(ll_head_t*, void*);
 
 #endif

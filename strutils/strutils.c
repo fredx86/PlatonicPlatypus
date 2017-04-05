@@ -1,4 +1,4 @@
-#include "str_utils.h"
+#include "strutils.h"
 
 int str_count(const char* str, char c)
 {

@@ -50,8 +50,12 @@ ts_client_t* ts_make_client(sk_t*);
 ts_event_t* ts_make_event(ts_t*, enum e_ts_event, sock_t);
 
 ts_client_t* ts_accept(ts_t*);
-ts_client_t* ts_read(ts_t*, ts_client_t*, char* should_remove); /* Return NULL on error. Should change the 'should_remove' flag if needed */
-ts_client_t* ts_write(ts_t*, ts_client_t*, char* should_remove); /* Return NULL on error. Should change the 'should_remove' flag if needed  */
+
+/* Return NULL on error. Should change the 'should_remove' flag if needed  */
+ts_client_t* ts_read(ts_t*, ts_client_t*, char* should_remove);
+
+/* Return NULL on error. Should change the 'should_remove' flag if needed  */
+ts_client_t* ts_write(ts_t*, ts_client_t*, char* should_remove);
 
 int ts_init_socket(sk_t*, int ai_family, uint16_t port);
 int ts_bind_socket(sk_t*, struct addrinfo*);

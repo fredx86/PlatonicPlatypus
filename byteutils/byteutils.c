@@ -1,4 +1,4 @@
-#include "byte_utils.h"
+#include "byteutils.h"
 
 void* find_byte(const void* bytes, size_t len, char c)
 {

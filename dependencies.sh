@@ -2,11 +2,13 @@
 
 DEPENDENCY_FILE="config.dat"
 
+# echo the list of source code files (.c and .h) from a directory
 get_files()
 {
-  ls -l "$1" | grep ^- | tr -s ' ' | cut -d ' ' -f 9
+  ls "$1" | grep .[hc]$
 }
 
+# echo the dependancies from a module
 get_dependency()
 {
   while read LINE; do
@@ -17,7 +19,9 @@ get_dependency()
   done < "$DEPENDENCY_FILE"
 }
 
-add_dependencies()
+# resolve the dependancies from a module
+# copy the needed files into the module directory
+resolve_dependencies()
 {
   DIRS=$(get_dependency "$1")
   if [ ! "$DIRS" ]; then
@@ -25,12 +29,14 @@ add_dependencies()
   fi
   for DIR in $DIRS; do
     info "Resolving dependencies from $DIR"
-    cp "$DIR"/*.* "$2" || return 1
-    add_dependencies "$DIR" "$2"
+    cp "$DIR"/*.c "$2" || return 1
+    cp "$DIR"/*.h "$2" || return 1
+    resolve_dependencies "$DIR" "$2"
   done
   return 0
 }
 
+# clean all dependancies from all modules
 clean_dependencies()
 {
   DIRS=$(get_dependency "$1")
@@ -47,19 +53,29 @@ clean_dependencies()
   return 0
 }
 
-run_tests()
+build()
 {
-  cd "$1"/tests || return 1
-  make || return 1
-  ./unitary || return 1
-  make fclean 1> /dev/null
-  return 0
+    cd "$1"
+    make || return 1
+    make clean
+    cd - 1> /dev/null
+    return 0
+}
+
+tests()
+{
+    cd "$1/tests" 2> /dev/null || return 1
+    make || return 1
+    ./unitary || return 1
+    make fclean 1> /dev/null
+    cd - 1> /dev/null
+    return 0
 }
 
 err()
 {
-  echo -e "[\e[31mINFO\e[0m] $1" > /dev/stderr
-  exit 1
+    echo -e "[\e[31mINFO\e[0m] $1" > /dev/stderr
+    exit 1
 }
 
 info()
@@ -84,13 +100,16 @@ if [ $1 == "--clean" ]; then
   exit 0
 fi
 
-TARGET=${1%/}
+TARGET="$(basename $1)"
 
 test -d "$TARGET" || err "Module $TARGET does not exists"
-add_dependencies "$TARGET" "$TARGET" || err "Failed to recover dependencies for $TARGET"
-run_tests "$TARGET" && BUILD=1
-if [ $BUILD ]; then
-  info "Build OK for $TARGET"
-else
-  err "Build KO for $TARGET"
-fi
+resolve_dependencies "$TARGET" "$TARGET" || err "Failed to recover dependencies for $TARGET"
+info "Resolved all dependencies for $TARGET"
+
+build "$TARGET" || err "Build KO"
+info "Build OK"
+
+tests "$TARGET" || err "Tests KO"
+info "Tests OK"
+
+info "All set up for $TARGET!"
