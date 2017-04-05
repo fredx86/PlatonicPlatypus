@@ -3,6 +3,7 @@ SRCS	=	tserver.c	\
 		llist.c		\
 		timeutils.c	\
 		socket.c	\
+		packet.c	\
 		barray.c	\
 		byteutils.c
 
