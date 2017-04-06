@@ -30,6 +30,18 @@ char* str_consume(char* str, str_ctype_f contains)
   return (&str[i]);
 }
 
+int str_dup(char** cpy, const char* str)
+{
+  if (str == NULL)
+  {
+    *cpy = NULL;
+    return (0);
+  }
+  if ((*cpy = strdup(str)) == NULL)
+    return (-1);
+  return (0);
+}
+
 char* str_cpy_max(char* dest, const char* src, size_t max_len)
 {
   size_t i = 0;

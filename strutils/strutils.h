@@ -12,6 +12,13 @@ int str_count_f(const char*, str_ctype_f contains);
 char* str_consume(char*, str_ctype_f contains);
 
 /*
+  Copy the content of src into *dest using strdup
+  If src is NULL, dest is set to NULL
+  Return -1 on error
+*/
+int str_dup(char** dest, const char* src);
+
+/*
   Copy src into dest until \0 OR if max_len is reached
   Always add a \0 at the end of dest
   Return dest
