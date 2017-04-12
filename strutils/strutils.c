@@ -22,6 +22,23 @@ int str_count_f(const char* str, str_ctype_f contains)
   return (count);
 }
 
+int str_count_substr(const char* str, const char* substr)
+{
+  int count = 0;
+  char* tmp = (char*)str;
+  int len = strlen(substr);
+
+  while (tmp)
+  {
+    tmp = strstr(tmp, substr);
+    if (tmp == NULL)
+      continue;
+    tmp += len;
+    ++count;
+  }
+  return (count);
+}
+
 char* str_consume(char* str, str_ctype_f contains)
 {
   int i = 0;
@@ -106,26 +123,25 @@ char* str_tokenize(char* str, char c)
   return (str);
 }
 
-char** str_split(char* str, char c, int* size)
+char** str_split(char* str, const char* sep, int* size)
 {
   int i = 0;
   char** array;
   char* tmp = str;
+  int len = strlen(sep);
 
-  *size = str_count(str, c) + 1;
+  *size = str_count_substr(str, sep) + 1;
   if ((array = malloc(sizeof(*array) * (*size))) == NULL)
     return (NULL);
-  while (*str)
+  while (tmp)
   {
-    if (*str == c)
-    {
-      array[i++] = tmp;
-      *(str++) = 0;
-      tmp = str;
-    }
-    else
-      ++str;
+    tmp = strstr(str, sep);
+    if (tmp == NULL)
+      continue;
+    array[i++] = str;
+    *tmp = 0;
+    str = tmp + len;
   }
-  array[i] = tmp;
+  array[i] = str;
   return (array);
 }

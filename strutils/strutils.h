@@ -9,6 +9,7 @@ typedef int (*str_ctype_f)(int);
 
 int str_count(const char*, char);
 int str_count_f(const char*, str_ctype_f contains);
+int str_count_substr(const char*, const char* substr);
 char* str_consume(char*, str_ctype_f contains);
 
 /*
@@ -33,6 +34,6 @@ char* str_lower(char*);
 char* str_upper(char*);
 char* str_trim(char*);
 char* str_tokenize(char*, char);
-char** str_split(char*, char, int* size);
+char** str_split(char*, const char*, int* size);
 
 #endif
