@@ -1,6 +1,7 @@
 #ifndef SOCKET_H_
 #define SOCKET_H_
 
+#include <stdio.h>
 #include <string.h>
 #ifdef _WIN32
   #include <winsock2.h>
@@ -25,6 +26,11 @@ typedef struct s_socket
   socklen_t addr_size;
   struct sockaddr_storage addr;
 } sk_t;
+
+typedef int (*sk_init_f)(sk_t*, struct addrinfo*);
+
+/* Return 0 on error, 1 on success */
+int sk_init(sk_t*, const struct addrinfo*, const char*, uint16_t, sk_init_f);
 
 void sk_close(sk_t*);
 

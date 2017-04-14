@@ -1,12 +1,4 @@
-SRCS	=	 ascii.c	\
-		../barray.c	\
-		../byte_utils.c	\
-		../llist.c	\
-		../packet.c	\
-		../select.c	\
-		../socket.c	\
-		../time_utils.c	\
-		../tserver.c
+SRCS	=	 ascii.c
 
 OBJS	= $(SRCS:.c=.o)
 
@@ -17,7 +9,7 @@ CC	= gcc
 CFLAGS	= -Wall -Wextra -pedantic
 
 all: $(OBJS)
-	$(CC) -o $(NAME) $(OBJS)
+	$(CC) -o $(NAME) $(OBJS) ../libppts.a
 
 clean:
 	rm -f $(OBJS)

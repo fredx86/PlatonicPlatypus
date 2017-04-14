@@ -3,11 +3,15 @@
 ts_t* ts_create(int ai_family, uint16_t port, ts_packet_f on_rcvd)
 {
   ts_t* ts;
+  struct addrinfo hints = { 0 };
 
+  hints.ai_family = ai_family;
+  hints.ai_flags = AI_PASSIVE;
+  hints.ai_socktype = SOCK_STREAM;
   if (on_rcvd == NULL || (ts = malloc(sizeof(*ts))) == NULL)
     return (NULL);
   ts->on_rcvd = on_rcvd;
-  if (!ts_init_socket(&ts->socket, ai_family, port))
+  if (!sk_init(&ts->socket, &hints, NULL, port, ts_bind_socket))
     return (NULL);
   if ((ts->clients = ll_create()) == NULL)
     return (NULL);
@@ -61,6 +65,8 @@ ts_t* ts_send(ts_t* server, sock_t sock_id, const ba_t* array)
 
   if (server == NULL)
     return (NULL);
+  if (array == NULL)
+    return (server);
   if ((client = ts_get_client(server, sock_id)) == NULL)
     return (server);
   return (ts_send_client(server, client, array));
@@ -70,6 +76,8 @@ ts_t* ts_send_client(ts_t* server, ts_client_t* client, const ba_t* array)
 {
   if (server == NULL)
     return (NULL);
+  if (array == NULL)
+    return (server);
   if (sl_add(server->select, SL_WRITE, client->socket.sock) == NULL)
     return (NULL);
   if (ba_app(client->outbound, array->bytes, array->size) == NULL)
@@ -286,38 +294,6 @@ ts_client_t* ts_write(ts_t* server, ts_client_t* client, char* should_remove)
     *should_remove = 1;
   }
   return (client);
-}
-
-int ts_init_socket(sk_t* sk, int ai_family, uint16_t port)
-{
-  char strport[8];
-  struct addrinfo* tmp;
-  struct addrinfo* result;
-  struct addrinfo hints = { 0 };
-
-  hints.ai_family = ai_family;
-  hints.ai_flags = AI_PASSIVE;
-  hints.ai_socktype = SOCK_STREAM;
-  sprintf(strport, "%hu", port);
-  if (getaddrinfo(NULL, strport, &hints, &result) != 0)
-    return (0);
-  tmp = result;
-  while (tmp)
-  {
-    if ((sk->sock = socket(tmp->ai_family, tmp->ai_socktype, tmp->ai_protocol)) != INVALID_SOCKET)
-    {
-      if (ts_bind_socket(sk, tmp))
-      {
-        memcpy(&sk->addr, tmp->ai_addr, tmp->ai_addrlen);
-        sk->addr_size = tmp->ai_addrlen;
-        break;
-      }
-      sk_close(sk);
-    }
-    tmp = tmp->ai_next;
-  }
-  freeaddrinfo(result);
-  return (tmp != NULL);
 }
 
 int ts_bind_socket(sk_t* socket, struct addrinfo* addrinfo)
