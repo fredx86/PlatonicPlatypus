@@ -45,3 +45,5 @@ barray.c      byteutils.c  libppts.a  Makefile  select.c  socket.h      timeutil
 barray.h      byteutils.h  llist.c    packet.c  select.h  tests/        timeutils.h  tserver_event.h
 byte_utils.o  examples/    llist.h    packet.h  socket.c  time_utils.o  tserver.c
 ```
+## Misc
+Be aware that the modules were conceived and used on Linux _only_. There might be (some / a lot of) compilation errors / warnings on windows...
