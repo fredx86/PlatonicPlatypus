@@ -40,7 +40,7 @@ gcc -o unitary unit.o ../libppts.a
 It resolved all the dependencies (sources files), and generates the library as _libppts.a_ (as _Platonic Platypus Tcp Server_) in the _tcpserver/_ directory.
 
 ```
-$ ls
+$ ls tcpserver/
 barray.c      byteutils.c  libppts.a  Makefile  select.c  socket.h      timeutils.c  tserver.h
 barray.h      byteutils.h  llist.c    packet.c  select.h  tests/        timeutils.h  tserver_event.h
 byte_utils.o  examples/    llist.h    packet.h  socket.c  time_utils.o  tserver.c
