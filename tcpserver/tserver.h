@@ -7,6 +7,8 @@
 #include "socket.h"
 #include "tserver_event.h"
 
+#define TS_BUFLEN 1024
+
 typedef struct s_tcp_server ts_t;
 typedef uint32_t (*ts_packet_f)(const ba_t*, char);
 

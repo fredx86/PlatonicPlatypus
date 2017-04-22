@@ -1,6 +1,9 @@
 #include <signal.h>
 #include "../tserver.h"
 
+#define TIMEOUT 2.5 //In seconds
+#define PORT    4242
+
 char g_run = 1;
 
 void server_stop(int signal)
@@ -22,15 +25,15 @@ uint32_t packet_ascii(const ba_t* array, char status)
 int main()
 {
   ts_event_t* event;
-  ts_t* tiny_server = ts_create(AF_INET, 4242, &packet_ascii);
+  ts_t* tiny_server = ts_create(AF_INET, PORT, &packet_ascii);
 
   signal(SIGINT, server_stop);
   if (tiny_server == NULL)
     return (1);
-  printf("> Server running on port 4242\n");
+  printf("> Server running on port %d\n", PORT);
   while (g_run)
   {
-    if (ts_update(tiny_server, 2.5) == NULL)
+    if (ts_update(tiny_server, TIMEOUT) == NULL)
       break;
     while ((event = ts_poll(tiny_server)))
     {

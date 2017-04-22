@@ -253,12 +253,12 @@ ts_client_t* ts_accept(ts_t* server)
 
 ts_client_t* ts_read(ts_t* server, ts_client_t* client, char* should_remove)
 {
-  char buf[1024];
+  char buf[TS_BUFLEN];
   ssize_t received;
   ts_event_t* event;
   uint32_t pk_size = 1;
 
-  if ((received = recv(client->socket.sock, buf, 1024, 0)) > 0)
+  if ((received = recv(client->socket.sock, buf, TS_BUFLEN, 0)) > 0)
   {
     if (ba_app(client->inbound, buf, received) == NULL)
       return (NULL);
