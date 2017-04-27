@@ -1,9 +1,9 @@
 #include "strutils.h"
 
-int str_count(const char* str, char c)
+size_t str_count(const char* str, char c)
 {
-  int count = 0;
-  for (int i = 0; str[i]; ++i)
+  size_t count = 0;
+  for (size_t i = 0; str[i]; ++i)
   {
     if (str[i] == c)
       ++count;
@@ -11,10 +11,10 @@ int str_count(const char* str, char c)
   return (count);
 }
 
-int str_count_f(const char* str, str_ctype_f contains)
+size_t str_count_f(const char* str, str_ctype_f contains)
 {
-  int count = 0;
-  for (int i = 0; str[i]; ++i)
+  size_t count = 0;
+  for (size_t i = 0; str[i]; ++i)
   {
     if (contains(str[i]))
       ++count;
@@ -22,11 +22,11 @@ int str_count_f(const char* str, str_ctype_f contains)
   return (count);
 }
 
-int str_count_substr(const char* str, const char* substr)
+size_t str_count_substr(const char* str, const char* substr)
 {
-  int count = 0;
+  size_t count = 0;
   char* tmp = (char*)str;
-  int len = strlen(substr);
+  size_t len = strlen(substr);
 
   while (tmp)
   {
@@ -73,22 +73,22 @@ char* str_cpy_max(char* dest, const char* src, size_t max_len)
 
 char* str_lower(char* str)
 {
-  for (int i = 0; str[i]; ++i)
+  for (size_t i = 0; str[i]; ++i)
     str[i] = tolower(str[i]);
   return (str);
 }
 
 char* str_upper(char* str)
 {
-  for (int i = 0; str[i]; ++i)
+  for (size_t i = 0; str[i]; ++i)
     str[i] = toupper(str[i]);
   return (str);
 }
 
 char* str_trim(char* str)
 {
-  int starts = 0;
-  int ends = strlen(str);
+  size_t starts = 0;
+  size_t ends = strlen(str);
 
   if (ends == 0)
     return (str);
@@ -106,9 +106,9 @@ char* str_trim(char* str)
 
 char* str_tokenize(char* str, char c)
 {
-  int j = 0;
+  size_t j = 0;
   str = str_trim(str);
-  for (int i = 0; str[i];)
+  for (size_t i = 0; str[i];)
   {
     if (isspace(str[i]))
     {
@@ -125,10 +125,10 @@ char* str_tokenize(char* str, char c)
 
 char** str_split(char* str, const char* sep, int* size)
 {
-  int i = 0;
+  size_t i = 0;
   char** array;
   char* tmp = str;
-  int len = strlen(sep);
+  size_t len = strlen(sep);
 
   *size = str_count_substr(str, sep) + 1;
   if ((array = malloc(sizeof(*array) * (*size))) == NULL)
@@ -144,4 +144,15 @@ char** str_split(char* str, const char* sep, int* size)
   }
   array[i] = str;
   return (array);
+}
+
+char* str_argument(size_t size, char** haystack, const char* needle)
+{
+  size_t len = strlen(needle);
+  for (size_t i = 0; i < size; ++i)
+  {
+    if (strncmp(needle, haystack[i], len) == 0 && haystack[i][len] == '=')
+      return (haystack[i] + len + 1);
+  }
+  return (NULL);
 }
