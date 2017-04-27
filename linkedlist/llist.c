@@ -11,6 +11,11 @@ ll_head_t* ll_create()
   return (head);
 }
 
+void ll_clear(ll_head_t* head)
+{
+  while (ll_pop(head) != NULL);
+}
+
 ll_t* ll_swap(ll_t* dest, ll_t* src)
 {
   void* elem = dest->elem;
@@ -24,7 +29,7 @@ void* ll_pop(ll_head_t* head)
 {
   void* elem;
 
-  if (head == NULL || ll_empty(head) == 1)
+  if (ll_empty(head) != 0)
     return (NULL);
   elem = head->begin->elem;
   ll_erase(head->begin);
@@ -34,9 +39,6 @@ void* ll_pop(ll_head_t* head)
 ll_t* ll_push(ll_head_t* head, ll_t* node, void* elem)
 {
   ll_t* tmp;
-
-  if (head == NULL)
-    return (NULL);
 
   if ((tmp = ll_make_node(head, elem)) == NULL)
     return (NULL);
@@ -67,8 +69,6 @@ ll_t* ll_push_node(ll_head_t* head, ll_t* node, ll_t* new_node)
 
 ll_t* ll_push_back(ll_head_t* head, void* elem)
 {
-  if (head == NULL)
-    return (NULL);
   return (ll_push(head, head->end, elem));
 }
 
@@ -76,8 +76,6 @@ ll_t* ll_push_front(ll_head_t* head, void* elem)
 {
   ll_t* tmp;
 
-  if (head == NULL)
-    return (NULL);
   if ((tmp = ll_push(head, head->begin, elem)) == NULL)
     return (NULL);
   return (ll_swap(head->begin, tmp));
@@ -113,8 +111,7 @@ int ll_empty(const ll_head_t* head)
 
 void ll_destroy(ll_head_t* head)
 {
-  while (ll_empty(head) == 0)
-    ll_pop(head);
+  ll_clear(head);
   free(head);
 }
 

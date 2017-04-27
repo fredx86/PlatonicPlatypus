@@ -20,6 +20,9 @@ typedef struct s_llist
 
 ll_head_t* ll_create();
 
+/* Clear the linked list. Does NOT free() the ll_t->elem */
+void ll_clear(ll_head_t*);
+
 /* Swap elem between src and dest. Return dest */
 ll_t* ll_swap(ll_t* dest, ll_t* src);
 

@@ -300,7 +300,7 @@ int ts_bind_socket(sk_t* socket, struct addrinfo* addrinfo)
 {
   int reuse = 1;
 
-  setsockopt(socket->sock, SOL_SOCKET, SO_REUSEADDR, &reuse, sizeof(reuse));
+  setsockopt(socket->sock, SOL_SOCKET, SO_REUSEADDR, (const char*)&reuse, sizeof(reuse));
   if (bind(socket->sock, addrinfo->ai_addr, addrinfo->ai_addrlen) == SOCKET_ERROR)
     return (0);
   if (listen(socket->sock, SOMAXCONN) == SOCKET_ERROR)
