@@ -1,5 +1,21 @@
 #include "socket.h"
 
+int sk_start()
+{
+#ifdef _WIN32
+  WSADATA wsa;
+  return (WSAStartup(MAKEWORD(2, 2), &wsa) != 0);
+#endif
+  return (1);
+}
+
+void sk_stop()
+{
+#ifdef _WIN32
+  WSACleanup();
+#endif
+}
+
 int sk_init(sk_t* sk, const struct addrinfo* hints, const char* host, \
   uint16_t port, sk_init_f init)
 {

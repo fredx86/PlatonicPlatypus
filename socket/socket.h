@@ -2,6 +2,7 @@
 #define SOCKET_H_
 
 #include <stdio.h>
+#include <stdint.h>
 #include <string.h>
 #ifdef _WIN32
   #include <winsock2.h>
@@ -28,6 +29,11 @@ typedef struct s_socket
 } sk_t;
 
 typedef int (*sk_init_f)(sk_t*, struct addrinfo*);
+
+/* Enable sockets functionalities. Return 0 on failure */
+int sk_start();
+/* Disable sockets functionnalities */
+void sk_stop();
 
 /* Return 0 on error, 1 on success */
 int sk_init(sk_t*, const struct addrinfo*, const char*, uint16_t, sk_init_f);
