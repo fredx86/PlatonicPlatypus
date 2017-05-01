@@ -4,7 +4,7 @@ int sk_start()
 {
 #ifdef _WIN32
   WSADATA wsa;
-  return (WSAStartup(MAKEWORD(2, 2), &wsa) != 0);
+  return (WSAStartup(MAKEWORD(2, 2), &wsa) == 0);
 #endif
   return (1);
 }
