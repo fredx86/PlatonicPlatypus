@@ -105,6 +105,13 @@ pk_t* pk_get_str(pk_t* packet, char* str, size_t size)
   return (packet);
 }
 
+size_t pk_size(const pk_t* packet)
+{
+  if (packet == NULL)
+    return (0);
+  return (packet->content->size);
+}
+
 size_t pk_buflen(pk_t* packet)
 {
   if (packet == NULL)

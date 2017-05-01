@@ -32,6 +32,7 @@ pk_t* pk_get_i16(pk_t*, uint16_t*);
 pk_t* pk_get_i32(pk_t*, uint32_t*);
 pk_t* pk_get_str(pk_t*, char*, size_t);
 
+size_t pk_size(const pk_t*);
 size_t pk_buflen(pk_t*);
 
 pk_t* pk_insert(pk_t*, size_t, const void*, size_t);
