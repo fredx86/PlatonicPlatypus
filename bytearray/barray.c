@@ -40,6 +40,30 @@ ba_t* ba_app_byte(ba_t* barray, char byte)
   return (barray);
 }
 
+ba_t* ba_app_format(ba_t* barray, const char* format, ...)
+{
+  char* ptr;
+  int n = 0;
+  va_list ap;
+  int available;
+
+  if (barray == NULL)
+    return (NULL);
+  ptr = barray->bytes + barray->size;
+  available = barray->alloc - barray->size;
+  while (available < n || n == 0)
+  {
+    ptr = (ptr == NULL ? barray->bytes : ptr);
+    available = barray->alloc - barray->size;
+    va_start(ap, format);
+    n = vsnprintf(ptr, available, format, ap);
+    va_end(ap);
+    if (!ba_memory_for(barray, n + BA_GROWSIZE))
+      return (NULL);
+  }
+  return (barray);
+}
+
 ba_t* ba_insert(ba_t* barray, size_t pos, const void* bytes, size_t size)
 {
   if (barray == NULL || pos > barray->size)

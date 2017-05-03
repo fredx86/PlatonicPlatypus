@@ -1,7 +1,11 @@
 #ifndef BARRAY_H_
 #define BARRAY_H_
 
+#include <stdio.h>
+#include <stdarg.h>
 #include "byteutils.h"
+
+#define BA_GROWSIZE 32
 
 typedef struct s_barray
 {
@@ -15,6 +19,7 @@ ba_t* ba_create(const void*, size_t);
 void ba_clear(ba_t*);
 ba_t* ba_app(ba_t*, const void*, size_t);
 ba_t* ba_app_byte(ba_t*, char);
+ba_t* ba_app_format(ba_t*, const char* format, ...);
 
 ba_t* ba_insert(ba_t*, size_t, const void*, size_t);
 ba_t* ba_replace(ba_t*, size_t, const void*, size_t);
