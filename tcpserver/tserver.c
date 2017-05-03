@@ -63,10 +63,8 @@ ts_t* ts_send(ts_t* server, sock_t sock_id, const ba_t* array)
 {
   ts_client_t* client;
 
-  if (server == NULL)
+  if (server == NULL || array == NULL)
     return (NULL);
-  if (array == NULL)
-    return (server);
   if ((client = ts_get_client(server, sock_id)) == NULL)
     return (server);
   return (ts_send_client(server, client, array));
@@ -74,10 +72,8 @@ ts_t* ts_send(ts_t* server, sock_t sock_id, const ba_t* array)
 
 ts_t* ts_send_client(ts_t* server, ts_client_t* client, const ba_t* array)
 {
-  if (server == NULL)
+  if (server == NULL || array == NULL)
     return (NULL);
-  if (array == NULL)
-    return (server);
   if (sl_add(server->select, SL_WRITE, client->socket.sock) == NULL)
     return (NULL);
   if (ba_app(client->outbound, array->bytes, array->size) == NULL)
