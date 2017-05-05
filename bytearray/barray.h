@@ -5,8 +5,6 @@
 #include <stdarg.h>
 #include "byteutils.h"
 
-#define BA_GROWSIZE 32
-
 typedef struct s_barray
 {
   char* bytes;
