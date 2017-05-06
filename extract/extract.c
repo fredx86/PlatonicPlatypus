@@ -68,11 +68,15 @@ struct s_extract* extract_get(char flag)
     { 'i', 0, { .str = extract_identifier }, extract_as_str },
     { 'd', 0, { .str = extract_number }, extract_as_int },
     { 'f', 0, { .str = extract_floating_point }, extract_as_float },
+    { 's', 1, { .chr = isalpha }, extract_as_str },
     { '_', 1, { .chr = isspace }, extract_as_str },
-    { 'a', 1, { .chr = islower }, extract_as_str },
-    { 'A', 1, { .chr = isupper }, extract_as_str },
+    { 'l', 1, { .chr = isalnum }, extract_as_str },
+    { 'c', 1, { .chr = islower }, extract_as_str },
+    { 'C', 1, { .chr = isupper }, extract_as_str },
+    { 'g', 1, { .chr = isgraph }, extract_as_str },
     { '.', 1, { .chr = ispunct }, extract_as_str },
-    { '%', 1, { .str = extract_modulo }, extract_as_char },
+    { 'p', 1, { .chr = isprint }, extract_as_str },
+    { '%', 0, { .str = extract_modulo }, extract_as_char },
     { 0, 0, { NULL }, NULL }
   };
   for (int i = 0; flags[i].flag; ++i)
@@ -101,7 +105,7 @@ int extract_consume(char** str, ba_t* array, struct s_extract* flag, va_list* ap
     return (-1);
   if (ba_app(array, ptr, *str - ptr) == NULL || ba_app_byte(array, 0) == NULL)
     return (-1);
-  if (flag->extract && (ptr = va_arg(*ap, void*)))
+  if (flag->extract && (ptr = va_arg(*ap, void*)) != NULL)
     flag->extract(array->bytes, ptr);
   return (0);
 }
@@ -121,20 +125,12 @@ int extract(const char* str, const char* format, ...)
     {
       if ((flag = extract_get(*format)) == NULL || \
         extract_consume((char**)&str, array, flag, &ap) < 0)
-      {
-        ba_destroy(array);
-        va_end(ap);
-        return (-1);
-      }
+        break;
     }
     else
     {
       if (*str != *format)
-      {
-        ba_destroy(array);
-        va_end(ap);
-        return (-1);
-      }
+        break;
       ++str;
     }
     ++format;
