@@ -42,28 +42,26 @@ ba_t* ba_app_byte(ba_t* barray, char byte)
 
 ba_t* ba_app_format(ba_t* barray, const char *format, ...)
 {
-  int n;
   char* ptr;
   va_list ap;
   int available;
+  int n = strlen(format);
 
-  if (barray == NULL || !ba_memory_for(barray, strlen(format)))
+  if (barray == NULL)
     return (NULL);
-  available = barray->alloc - barray->size;
-  while (1) //Bad practice
+  do
   {
-    ptr = barray->bytes + barray->size;
-    va_start(ap, format);
-    n = vsnprintf(ptr, available, format, ap);
-    va_end(ap);
-    if (n < 0)
-      return (NULL);
-    if (n < available)
-      break;
     if (!ba_memory_for(barray, n + 1))
       return (NULL);
+    ptr = barray->bytes + barray->size;
     available = barray->alloc - barray->size;
+    va_start(ap, format);
+    n = vsnprintf(ptr, available, format, ap);
+    if (n < 0)
+      return (NULL);
+    va_end(ap);
   }
+  while (n >= available);
   barray->size += n;
   return (barray);
 }

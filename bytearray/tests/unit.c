@@ -1,4 +1,5 @@
 #include <assert.h>
+#include <string.h>
 #include "../barray.h"
 
 int main()
@@ -63,6 +64,12 @@ int main()
   assert(ba_find_byte(NULL, 'a') == NULL);
   assert(ba_find_byte(array, 'a') != NULL);
   assert(ba_find_byte(array, 'h') == NULL);
+
+  ba_clear(array);
+
+  assert(ba_app_format(array, "%X:%d", 42, 42) != NULL);
+  assert(array->size == 5);
+  assert(strcmp(array->bytes, "2A:42") == 0);
 
   ba_destroy(array);
   return (0);
