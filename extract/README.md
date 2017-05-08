@@ -19,10 +19,11 @@ The function returns 0 on success, -1 on error.
 
 Specifier | Input | Example
 ------------ | ------------- | -------------
-i | Identifier | heLLo_42
+s | Identifier | heLLo_42
 d | Integer | -42
+k | Char | -42
 f | Floating point | 42.42
-s | Alpha | heLLo
+a | Alpha | heLLo
 \_ | Space (_isspace_) |
 l | Alpha-numeric (_isalnum_) | heLLo42
 c | Lower character (_islower_) | hello

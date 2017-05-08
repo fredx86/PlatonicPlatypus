@@ -2,7 +2,7 @@
 
 void extract_as_char(char* str, void* ptr)
 {
-  *(char*)ptr = str[0];
+  *(char*)ptr = atoi(str);
 }
 
 void extract_as_str(char* str, void* ptr)
@@ -19,6 +19,11 @@ void extract_as_int(char* str, void* ptr)
 void extract_as_float(char* str, void* ptr)
 {
   *(float*)ptr = atof(str);
+}
+
+void extract_from_char(char* str, void* ptr)
+{
+  *(char*)ptr = str[0];
 }
 
 char* extract_modulo(char* str)
@@ -65,10 +70,11 @@ char* extract_floating_point(char* str)
 struct s_extract* extract_get(char flag)
 {
   static struct s_extract flags[] = {
-    { 'i', 0, { .str = extract_identifier }, extract_as_str },
+    { 's', 0, { .str = extract_identifier }, extract_as_str },
     { 'd', 0, { .str = extract_number }, extract_as_int },
+    { 'k', 0, { .str = extract_number }, extract_as_char },
     { 'f', 0, { .str = extract_floating_point }, extract_as_float },
-    { 's', 1, { .chr = isalpha }, extract_as_str },
+    { 'a', 1, { .chr = isalpha }, extract_as_str },
     { '_', 1, { .chr = isspace }, extract_as_str },
     { 'l', 1, { .chr = isalnum }, extract_as_str },
     { 'c', 1, { .chr = islower }, extract_as_str },
@@ -76,7 +82,7 @@ struct s_extract* extract_get(char flag)
     { 'g', 1, { .chr = isgraph }, extract_as_str },
     { '.', 1, { .chr = ispunct }, extract_as_str },
     { 'p', 1, { .chr = isprint }, extract_as_str },
-    { '%', 0, { .str = extract_modulo }, extract_as_char },
+    { '%', 0, { .str = extract_modulo }, extract_from_char },
     { 0, 0, { NULL }, NULL }
   };
   for (int i = 0; flags[i].flag; ++i)

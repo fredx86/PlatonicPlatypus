@@ -21,6 +21,7 @@ void extract_as_char(char*, void*);
 void extract_as_str(char*, void*);
 void extract_as_int(char*, void*);
 void extract_as_float(char*, void*);
+void extract_from_char(char*, void*);
 
 char* extract_modulo(char*);
 char* extract_identifier(char*);

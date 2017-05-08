@@ -3,8 +3,8 @@
 
 int main()
 {
-  int i[10];
   float f;
+  int i[10];
   char* str[10];
 
   assert(extract("", "") == 0);
@@ -17,8 +17,7 @@ int main()
   assert(f == 42.0f);
   assert(extract("hello world", "%s %s", &str[0], &str[1]) == 0);
   assert(strcmp(str[0], "hello") == 0 && strcmp(str[1], "world") == 0);
-  assert(extract("hello world", "%s", &str[0]) < 0);
-  assert(extract("hello_world", "%i", &str[0]) == 0);
+  assert(extract("hello_world", "%s", &str[0]) == 0);
   assert(strcmp(str[0], "hello_world") == 0);
   assert(extract("%", "%") < 0);
   assert(extract("%", "%%", NULL) == 0);
@@ -27,7 +26,10 @@ int main()
   assert(extract("test % 423", "test %% %d", NULL, &i[0]) == 0);
   assert(i[0] == 423);
   assert(extract("prout l", "%i %d", &str[0], &i[0]) < 0);
-  assert(extract("TEST test 42", "%C %i %d", NULL, &str[0], &i[0]) == 0);
+  assert(extract("TEST test 42", "%C %s %d", NULL, &str[0], &i[0]) == 0);
   assert(strcmp(str[0], "test") == 0);
+  assert(extract("CONNECT lol 0 -42 1", "%C %s %d %d %d", NULL, &str[0], &i[0], &i[1], &i[2]) == 0);
+  assert(strcmp(str[0], "lol") == 0);
+  assert(i[0] == 0 && i[1] == -42 && i[2] == 1);
   return (0);
 }
