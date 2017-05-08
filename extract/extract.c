@@ -106,7 +106,7 @@ int extract_consume(char** str, ba_t* array, struct s_extract* flag, va_list* ap
   if (ba_app(array, *str, ptr - *str) == NULL || ba_app_byte(array, 0) == NULL)
     return (-1);
   *str = ptr;
-  if (flag->extract && (ptr = va_arg(*ap, void*)) != NULL)
+  if ((ptr = va_arg(*ap, void*)) != NULL && flag->extract)
     flag->extract(array->bytes, ptr);
   return (0);
 }

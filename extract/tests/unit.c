@@ -21,11 +21,13 @@ int main()
   assert(extract("hello_world", "%i", &str[0]) == 0);
   assert(strcmp(str[0], "hello_world") == 0);
   assert(extract("%", "%") < 0);
-  assert(extract("%", "%%") == 0);
+  assert(extract("%", "%%", NULL) == 0);
   assert(extract("lowercase%UPPERCASE", "%c%%%C", &str[0], NULL, &str[1]) == 0);
   assert(strcmp(str[0], "lowercase") == 0 && strcmp(str[1], "UPPERCASE") == 0);
   assert(extract("test % 423", "test %% %d", NULL, &i[0]) == 0);
   assert(i[0] == 423);
-  assert(extract("test l", "%i %d", &str[0], &i[0]) < 0);
+  assert(extract("prout l", "%i %d", &str[0], &i[0]) < 0);
+  assert(extract("TEST test 42", "%C %i %d", NULL, &str[0], &i[0]) == 0);
+  assert(strcmp(str[0], "test") == 0);
   return (0);
 }
