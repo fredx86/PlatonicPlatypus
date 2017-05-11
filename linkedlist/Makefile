@@ -6,7 +6,7 @@ NAME	=	libppll.a
 
 CC	=	gcc
 
-CLAGS	=	-Wall -Wextra -pedantic
+CFLAGS	=	-Wall -Wextra -pedantic
 
 all: $(NAME)
 

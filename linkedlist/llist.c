@@ -8,6 +8,7 @@ ll_head_t* ll_create()
     return (NULL);
   head->begin = NULL;
   head->end = NULL;
+  head->size = 0;
   return (head);
 }
 
@@ -64,6 +65,7 @@ ll_t* ll_push_node(ll_head_t* head, ll_t* node, ll_t* new_node)
     node->next->prev = new_node;
   }
   node->next = new_node;
+  ++head->size;
   return (new_node);
 }
 
@@ -88,6 +90,7 @@ ll_t* ll_erase(ll_t* node)
   if (node == NULL)
     return (NULL);
   next = node->next;
+  --node->head->size;
 
   if (node->prev == NULL)
     node->head->begin = node->next;

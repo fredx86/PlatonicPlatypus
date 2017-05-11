@@ -8,6 +8,7 @@ typedef struct s_llhead
 {
   ll_t* begin;
   ll_t* end;
+  size_t size;
 } ll_head_t;
 
 typedef struct s_llist
