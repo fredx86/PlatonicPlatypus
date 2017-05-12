@@ -48,6 +48,7 @@ ll_t* ll_push(ll_head_t* head, ll_t* node, void* elem)
 
 ll_t* ll_push_node(ll_head_t* head, ll_t* node, ll_t* new_node)
 {
+  ++head->size;
   if (node == NULL)
   {
     head->begin = new_node;
@@ -65,7 +66,6 @@ ll_t* ll_push_node(ll_head_t* head, ll_t* node, ll_t* new_node)
     node->next->prev = new_node;
   }
   node->next = new_node;
-  ++head->size;
   return (new_node);
 }
 
