@@ -3,7 +3,9 @@
 
 int main()
 {
-  hm_t* map = hm_create(1, HM_STRING, &hm_jenkins);
+  int value = 42;
+  int test = 42;
+  hm_t* map = hm_create(1, hm_len_string, hm_cmp_string, hm_jenkins);
 
   assert(map != NULL);
   assert(hm_get(map, "a") == NULL);
@@ -24,6 +26,13 @@ int main()
   assert(hm_get(map, "a") == NULL);
   assert(hm_put(map, "a", NULL) != NULL);
   assert(hm_get(map, "a") != NULL);
+
+  map = hm_create(HM_SMALL, hm_len_int, hm_cmp_int, hm_jenkins);
+
+  assert(map != NULL);
+  assert(hm_put(map, &value, "I am stored at 42") != NULL);
+  assert(hm_get(map, &test) != NULL);
+  assert(strcmp((char*)hm_get(map, &test)->value, "I am stored at 42") == 0);
 
   hm_destroy(map);
   return (0);

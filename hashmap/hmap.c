@@ -1,6 +1,6 @@
 #include "hmap.h"
 
-hm_t* hm_create(hm_size size, hm_key_t key_type, hm_hash_f hash_func)
+hm_t* hm_create(hm_size size, hm_len_f key_size, hm_cmp_f key_cmp, hm_hash_f hash_func)
 {
   hm_t* map;
 
@@ -8,7 +8,8 @@ hm_t* hm_create(hm_size size, hm_key_t key_type, hm_hash_f hash_func)
     return (NULL);
   map->size = size;
   map->hash = (hash_func == NULL ? &hm_jenkins : hash_func);
-  map->key = key_type;
+  map->key_size = key_size;
+  map->key_cmp = key_cmp;
   if ((map->buckets = calloc(size, sizeof(*map->buckets))) == NULL)
     return (NULL);
   return (map);
@@ -61,7 +62,7 @@ void hm_destroy(hm_t* map)
 
 size_t hm_key_index(hm_t* map, const void* key)
 {
-  return (map->hash(key, hm_key_size(map->key, key)) % map->size);
+  return (map->hash(key, map->key_size(key)) % map->size);
 }
 
 hm_pair_t* hm_add_keyval(hm_t* map, const void* key, void* value)
@@ -92,25 +93,11 @@ hm_pair_t* hm_key_find(hm_t* map, const ll_head_t* head, const void* key)
   while (it)
   {
     pair = (hm_pair_t*)it->elem;
-    if (hm_key_cmp(map->key, key, pair->key))
+    if (map->key_cmp(key, pair->key))
       return (pair);
     it = it->next;
   }
   return (NULL);
-}
-
-int hm_key_cmp(hm_key_t key_type, const void* x, const void* y)
-{
-  if (key_type == HM_STRING)
-    return (strcmp((const char*)x, (const char*)y) == 0);
-  return (x == y);
-}
-
-size_t hm_key_size(hm_key_t key_type, const void* key)
-{
-  if (key_type == HM_STRING)
-    return (strlen((const char*)key));
-  return (sizeof(key));
 }
 
 hm_pair_t* hm_make_pair(const void* key, void* value)
@@ -140,4 +127,25 @@ size_t hm_jenkins(const char* key, size_t len)
   hash ^= (hash >> 11);
   hash += (hash << 15);
   return (hash);
+}
+
+size_t hm_len_string(const void* string)
+{
+  return (strlen((const char*)string));
+}
+
+int hm_cmp_string(const void* a, const void* b)
+{
+  return (strcmp((const char*)a, (const char*)b) == 0);
+}
+
+size_t hm_len_int(const void* intptr)
+{
+  (void)intptr;
+  return (sizeof(int));
+}
+
+int hm_cmp_int(const void* a, const void* b)
+{
+  return (*(int*)a == *(int*)b);
 }
