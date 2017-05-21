@@ -20,6 +20,7 @@ pk_t* pk_create(const void*, size_t);
 
 void pk_clear(pk_t*);
 void pk_ptr_reset(pk_t*);
+int pk_ptr_update(pk_t*);
 pk_t* pk_app(pk_t*, const void*, size_t);
 pk_t* pk_i8(pk_t*, uint8_t);
 pk_t* pk_i16(pk_t*, uint16_t);
@@ -27,6 +28,14 @@ pk_t* pk_i32(pk_t*, uint32_t);
 pk_t* pk_str(pk_t*, char*);
 
 pk_t* pk_get(pk_t*, size_t, void*);
+
+/*
+  Extract into 'buf' of size 'size' until one of 'bytes'
+  Return the number of bytes extracted
+  Return -1 on failure
+*/
+int pk_extract(pk_t*, const char* bytes, size_t size, void* buf);
+
 pk_t* pk_get_i8(pk_t*, uint8_t*);
 pk_t* pk_get_i16(pk_t*, uint16_t*);
 pk_t* pk_get_i32(pk_t*, uint32_t*);

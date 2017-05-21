@@ -26,6 +26,16 @@ void pk_ptr_reset(pk_t* packet)
     packet->ptr = packet->content->bytes;
 }
 
+int pk_ptr_update(pk_t* packet)
+{
+  if (packet == NULL)
+    return (0);
+  if (packet->ptr != NULL)
+    return (1);
+  pk_ptr_reset(packet);
+  return (packet->ptr != NULL);
+}
+
 pk_t* pk_app(pk_t* packet, const void* bytes, size_t size)
 {
   if (packet == NULL)
@@ -56,15 +66,29 @@ pk_t* pk_str(pk_t* packet, char* str)
   return (pk_app(packet, str, len + 1));
 }
 
-pk_t* pk_get(pk_t* packet, size_t size, void* bytes)
+pk_t* pk_get(pk_t* packet, size_t size, void* buf)
 {
-  if (packet == NULL)
-    return (NULL);
   if (pk_buflen(packet) < size)
     return (NULL);
-  memcpy(bytes, packet->ptr, size);
+  memcpy(buf, packet->ptr, size);
   packet->ptr += size;
   return (packet);
+}
+
+int pk_extract(pk_t* packet, const char* bytes, size_t size, void* buf)
+{
+  if (!pk_ptr_update(packet))
+    return (-1);
+  for (size_t i = 0; i < size; ++i)
+  {
+    if (strchr(bytes, packet->ptr[i]))
+    {
+      memcpy(buf, packet->ptr, i);
+      packet->ptr += i + 1;
+      return (i);
+    }
+  }
+  return (0);
 }
 
 pk_t* pk_get_i8(pk_t* packet, uint8_t* n)
@@ -93,7 +117,7 @@ pk_t* pk_get_str(pk_t* packet, char* str, size_t size)
   size_t len;
   char* end_of_str;
 
-  if (packet == NULL)
+  if (!pk_ptr_update(packet))
     return (NULL);
   if ((end_of_str = find_byte(packet->ptr, pk_buflen(packet), 0)) == NULL)
     return (NULL);
@@ -114,14 +138,8 @@ size_t pk_size(const pk_t* packet)
 
 size_t pk_buflen(pk_t* packet)
 {
-  if (packet == NULL)
+  if (!pk_ptr_update(packet))
     return (0);
-  if (packet->ptr == NULL)
-  {
-    pk_ptr_reset(packet);
-    if (packet->ptr == NULL)
-      return (0);
-  }
   return (packet->content->size - (packet->ptr - packet->content->bytes));
 }
 

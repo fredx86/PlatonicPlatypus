@@ -40,5 +40,16 @@ int main()
   assert(strcmp(data, "hello") == 0);
   assert(pk_get_i32(packet, &i) != NULL);
   assert(i == 97531);
+
+  pk_clear(packet);
+
+  assert(pk_app(packet, "i am a test hello_world!\n", 25) != NULL);
+  assert(pk_extract(packet, " \n", 32, data) == 1);
+  assert(pk_extract(packet, " \n", 32, data) == 2);
+  assert(pk_extract(packet, " \n", 32, data) == 1);
+  assert(pk_extract(packet, " \n", 32, data) == 4);
+  assert(pk_extract(packet, " \n", 32, data) == 12);
+  assert(pk_extract(packet, " \n", 32, data) == 0);
+
   return (0);
 }
