@@ -83,7 +83,7 @@ ll_t* ll_push_front(ll_head_t* head, void* elem)
   return (ll_swap(head->begin, tmp));
 }
 
-ll_t* ll_get(ll_head_t* head, const void* elem)
+ll_t* ll_find(ll_head_t* head, const void* elem)
 {
   if (head == NULL)
     return (NULL);
