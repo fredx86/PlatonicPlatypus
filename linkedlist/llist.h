@@ -36,6 +36,9 @@ ll_t* ll_push_node(ll_head_t*, ll_t* node, ll_t*);
 ll_t* ll_push_back(ll_head_t*, void*);
 ll_t* ll_push_front(ll_head_t*, void*);
 
+/* Return the node that matches the 'elem' ptr */
+ll_t* ll_get(ll_head_t*, const void* elem);
+
 /* Erase the given node. Return the next node in case of iteration */
 ll_t* ll_erase(ll_t*);
 
