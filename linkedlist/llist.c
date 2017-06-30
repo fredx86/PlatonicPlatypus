@@ -83,6 +83,18 @@ ll_t* ll_push_front(ll_head_t* head, void* elem)
   return (ll_swap(head->begin, tmp));
 }
 
+ll_t* ll_find(ll_head_t* head, const void* elem)
+{
+  if (head == NULL)
+    return (NULL);
+  for (ll_t* it = head->begin; it; it = it->next)
+  {
+    if (it->elem == elem)
+      return (it);
+  }
+  return (NULL);
+}
+
 ll_t* ll_erase(ll_t* node)
 {
   ll_t* next;
