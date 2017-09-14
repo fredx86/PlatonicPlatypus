@@ -64,7 +64,7 @@ build()
 
 tests()
 {
-    cd "$1/tests" 2> /dev/null || return 1
+    cd "$1/tests" 2> /dev/null || (warn "No tests for $1" ; return 0)
     make || return 1
     ./unitary || return 1
     make fclean 1> /dev/null
@@ -76,6 +76,11 @@ err()
 {
     echo -e "[\e[31mINFO\e[0m] $1" > /dev/stderr
     exit 1
+}
+
+warn()
+{
+  echo -e "[\e[33mWARN\e[0m] $1"
 }
 
 info()
