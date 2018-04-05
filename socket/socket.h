@@ -1,43 +1,101 @@
 #ifndef SOCKET_H_
 #define SOCKET_H_
 
-#include <stdio.h>
-#include <stdint.h>
-#include <string.h>
-#ifdef _WIN32
-  #include <winsock2.h>
-  #include <Ws2tcpip.h>
-  typedef int socklen_t;
-  typedef SOCKET sock_t;
-#elif __linux__
-  #include <netdb.h>
-  #include <unistd.h>
-  #include <arpa/inet.h>
-  #include <sys/types.h>
-  #include <sys/socket.h>
-  #include <netinet/in.h>
-  typedef int sock_t;
-  #define INVALID_SOCKET  -1
-  #define SOCKET_ERROR    -1
-#endif
+#include <stdlib.h>
 
-typedef struct s_socket
+struct sock_options
 {
-  sock_t sock;
-  socklen_t addr_size;
-  struct sockaddr_storage addr;
-} sk_t;
+  int nonblock:1;
+  int ipv4:1;
+  int ipv6:1;
+  int reuse;
+};
 
-typedef int (*sk_init_f)(sk_t*, struct addrinfo*);
+struct sock_client
+{
+  const char* host;
+  const char* service;
+  struct sock_options options;
+};
 
-/* Enable sockets functionalities. Return 0 on failure */
-int sk_start();
-/* Disable sockets functionnalities */
-void sk_stop();
+struct sock_server
+{
+  const char* service;
+  int backlog;
+  struct sock_options options;
+};
 
-/* Return 0 on error, 1 on success */
-int sk_init(sk_t*, const struct addrinfo*, const char*, uint16_t, sk_init_f);
+/*
+  Socket definition to implement
+*/
+typedef struct sock sock_t;
 
-void sk_close(sk_t*);
+/*
+  @return       Parameter socket or NULL on error
+  @description  Initialize socket
+                Implementation defined
+*/
+sock_t* sock_init(sock_t* socket);
+
+/*
+  @description  Clear socket content
+                Implementation defined 
+*/
+void sock_clear(sock_t* socket);
+
+/*
+  @return       0 on success or negative value on error
+  @description  Prepare socket to talk from client
+                Implementation defined
+*/
+int sock_connect(sock_t* socket, const struct sock_client* client);
+
+/*
+  @return       0 on success or negative value on error
+  @description  Prepare socket to listen from server
+                Implementation defined
+*/
+int sock_listen(sock_t* socket, const struct sock_server* server);
+
+/*
+  @return       0 on success or negative value on error
+  @description  Close socket
+                Implementation defined
+*/
+int sock_close(sock_t* socket);
+
+/*
+  @return       0 on success or negative value on error
+  @description  Send data of size to socket with flags
+                sent is filled with the number of bytes sent
+                flags CAN be NULL
+                Implementation defined
+*/
+int sock_send(sock_t* socket, size_t* sent, const void* data, size_t size, const void* flags);
+
+/*
+  @return       0 on success or negative value on error
+  @description  Receive data of maximum size from socket with flags
+                recvd is filled with the number of bytes received
+                flags CAN be NULL
+                Implementation defined
+*/
+int sock_recv(sock_t* socket, size_t* recvd, void* data, size_t size, const void* flags);
+
+/*
+  @return       0 on success or negative value on error
+  @description  Accept an accepted socket from socket
+                Implementation defined
+*/
+int sock_accept(const sock_t* socket, sock_t* accepted);
+
+/*
+  OS-defined implementations
+*/
+#ifdef __unix__
+  #include "uxsocket.h"
+#else
+  #error socket.h not defined for target plateform
+#endif
 
 #endif

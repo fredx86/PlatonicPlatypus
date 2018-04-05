@@ -1,49 +1,15 @@
 # PlatonicPlatypus
-### _Personal C library_
 
-## How to use ?
-Run `./dependencies.sh <module>` where `module` is the directory you want (Ex: _tcpserver_)
+## Guidelines
+* Documentation of every function of every component MUST BE available in the header file
+* Functional tests of every component SHOULD BE available in the directory `tests` of the said component
+* Examples of every component MAY BE available in the directory `examples` of the said component
+* `#define` MUST NOT be used as "functions" ; use `inline` keyword instead
+* Functions _XXXX\_clear()_ MUST perform a complete clean-up of the entity, and MAY BE re-usable afterwards without having to call _XXXX\_init()_
 
-It will resolve possible dependencies, build the library and run the unit tests.
+## Futures implementations
+* Hashmaps
+* Whatever that suits me
 
-You can both use the sources files (.c & .h) directly, or use the static library generated in the directory.
-
-## Example
-
-```
-$ ./dependencies.sh tcpserver/
-[INFO] Resolving dependencies from select
-[INFO] Resolving dependencies from linkedlist
-[INFO] Resolving dependencies from socket
-[INFO] Resolving dependencies from timeutils
-[INFO] Resolving dependencies from packet
-[INFO] Resolving dependencies from bytearray
-[INFO] Resolving dependencies from byteutils
-[INFO] Resolved all dependencies for tcpserver
-gcc -Wall -Wextra -pedantic   -c -o tserver.o tserver.c
-gcc -Wall -Wextra -pedantic   -c -o select.o select.c
-gcc -Wall -Wextra -pedantic   -c -o llist.o llist.c
-gcc -Wall -Wextra -pedantic   -c -o timeutils.o timeutils.c
-gcc -Wall -Wextra -pedantic   -c -o socket.o socket.c
-gcc -Wall -Wextra -pedantic   -c -o packet.o packet.c
-gcc -Wall -Wextra -pedantic   -c -o barray.o barray.c
-gcc -Wall -Wextra -pedantic   -c -o byteutils.o byteutils.c
-ar rc libppts.a tserver.o select.o llist.o timeutils.o socket.o packet.o barray.o byteutils.o
-rm -f tserver.o select.o llist.o timeutils.o socket.o packet.o barray.o byteutils.o
-[INFO] Build OK
-gcc -Wall -Wextra -pedantic   -c -o unit.o unit.c
-gcc -o unitary unit.o ../libppts.a
-[INFO] Tests OK
-[INFO] All set up for tcpserver!
-```
-
-It resolved all the dependencies (sources files), and generates the library as _libppts.a_ (as _Platonic Platypus Tcp Server_) in the _tcpserver/_ directory.
-
-```
-$ ls tcpserver/
-barray.c      byteutils.c  libppts.a  Makefile  select.c  socket.h      timeutils.c  tserver.h
-barray.h      byteutils.h  llist.c    packet.c  select.h  tests/        timeutils.h  tserver_event.h
-byte_utils.o  examples/    llist.h    packet.h  socket.c  time_utils.o  tserver.c
-```
-## Misc
-Be aware that the modules were conceived and used on Linux _only_. There might be (some / a lot of) compilation errors / warnings on windows...
+## Notes
+* [thpool](./thpool) is using c11 _threads.h_
