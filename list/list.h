@@ -39,24 +39,28 @@ node_t* list_swap(node_t* dest, node_t* src);
 /*
   @return       Node created from value
   @description  Insert a node from value at the beginning of list
+                Do a shallow copy of value into list
 */
 node_t* list_push_front(list_t* list, void* value);
 
 /*
   @return       Node created from value
   @description  Insert a node from value at the end of list
+                Do a shallow copy of value into list
 */
 node_t* list_push_back(list_t* list, void* value);
 
 /*
   @return       Parameter node
   @description  Insert node after at in list
+                Do a shallow copy of value into list
 */
 node_t* list_insert_back(list_t* list, node_t* at, node_t* node);
 
 /*
   @return       Parameter node
   @description  Insert node before at in list
+                Do a shallow copy of value into list
 */
 node_t* list_insert_front(list_t* list, node_t* at, node_t* node);
 

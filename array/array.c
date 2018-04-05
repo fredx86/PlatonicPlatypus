@@ -32,7 +32,7 @@ void* array_append_at(array_t* array, size_t index, void* values, size_t nmember
     array_at(array, index),
     (array->size - index) * array->membsz);
   array->size += nmember;
-  return (memcpy(array_at(array, index), values, nmember * array->membsz));
+  return (memmove(array_at(array, index), values, nmember * array->membsz));
 }
 
 void* array_append(array_t* array, void* values, size_t nmember)
