@@ -1,4 +1,4 @@
-#include "thpool.h"
+#include "pp/thpool.h"
 
 thpool_t* thpool_init(thpool_t* pool, size_t nthreads)
 {

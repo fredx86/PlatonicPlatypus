@@ -3,7 +3,7 @@
 
 #include <threads.h>
 
-#include "list.h"
+#include "pp/list.h"
 
 #define THPOOL_WAIT_SEC   0
 #define THPOOL_WAIT_NSEC  50000000

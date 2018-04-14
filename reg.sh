@@ -1,7 +1,7 @@
 #!/bin/sh
 
 CC=musl-gcc
-LOGFILE=./.tests/reg.log
+LOGFILE=./tests/reg.log
 
 KO='\033[1;31m'
 OK='\033[1;32m'
@@ -40,7 +40,7 @@ test_failed()
 }
 
 LIB_FILES=`find ./srcs -type f -name '*.c'`
-TESTS_FILES=`find ./.tests -type f -name '*.c'`
+TESTS_FILES=`find ./tests -type f -name '*.c'`
 for FILE in $TESTS_FILES; do
   test_run "$FILE $LIB_FILES" "test" `basename $FILE`
 done

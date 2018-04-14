@@ -1,6 +1,6 @@
 #include <assert.h>
 
-#include "array.h"
+#include "pp/array.h"
 
 int main()
 {

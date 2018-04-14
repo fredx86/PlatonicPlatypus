@@ -36,6 +36,7 @@ Dump in ./.tests/reg.log
 
 ## Futures implementations
 * Hashmaps
+* sock_recv_timeout()
 * UDP Socket
 * Socket (Windows)
 * ...

@@ -1,7 +1,7 @@
 #include <assert.h>
 #include <stdio.h>
 
-#include "thpool.h"
+#include "pp/thpool.h"
 
 #define NMEMBR 15
 

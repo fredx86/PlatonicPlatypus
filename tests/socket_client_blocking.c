@@ -1,13 +1,8 @@
 #include <assert.h>
 
-#include "socket.h"
+#include "pp/socket.h"
 
-void non_blocking()
-{
-  //TODO
-}
-
-void blocking()
+int main()
 {
   size_t n;
   char buf[32];
@@ -30,11 +25,5 @@ void blocking()
   assert(n > 0 && n <= 8);
   assert(strncmp(buf, "HTTP/1.0", 8) == 0);
   sock_clear(&socket);
-}
-
-int main()
-{
-  blocking();
-  non_blocking();
   return (0);
 }
