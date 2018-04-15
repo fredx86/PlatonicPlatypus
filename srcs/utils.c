@@ -20,3 +20,14 @@ void* bytesfirst(const void* haystack, size_t hsize, const void* needle, size_t 
   }
   return (NULL);
 }
+
+char* strset(char* dest, size_t maxlen, const char* src)
+{
+  size_t i = 0;
+  for (; i < maxlen - 1 && src[i]; ++i)
+  {
+    dest[i] = src[i];
+  }
+  dest[i] = 0;
+  return (dest);
+}
