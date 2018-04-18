@@ -39,6 +39,7 @@ Dump in ./.tests/reg.log
 * sock_recv_timeout()
 * UDP Socket
 * Socket (Windows)
+* array_sort()
 * ...
 
 ## Notes

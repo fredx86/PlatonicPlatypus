@@ -4,10 +4,15 @@
 #include <stdlib.h>
 
 /*
+  @return       1 if system is big endian, 0 otherwise
+*/
+int is_little_endian();
+
+/*
   @return       Pointer to the first occurence from haystack or NULL if not found
   @description  Finds the first occurrence of needle in haystack
 */
-void* bytesfirst(const void* haystack, size_t hsize, const void* needle, size_t nsize);
+void* memfirst(const void* haystack, size_t hsize, const void* needle, size_t nsize);
 
 /*
   @return       dest

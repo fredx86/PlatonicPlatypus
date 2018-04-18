@@ -1,6 +1,12 @@
 #include "pp/utils.h"
 
-void* bytesfirst(const void* haystack, size_t hsize, const void* needle, size_t nsize)
+inline int is_little_endian()
+{
+  unsigned n = 1;
+  return (*(char*)&n);
+}
+
+void* memfirst(const void* haystack, size_t hsize, const void* needle, size_t nsize)
 {
   size_t i, j;
   const char* a = (const char*)haystack;
