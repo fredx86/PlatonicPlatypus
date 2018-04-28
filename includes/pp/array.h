@@ -26,7 +26,7 @@ void array_clear(array_t* array);
 /*
   @return      The element at position index in the array
 */
-void* array_at(const array_t*, size_t index);
+void* array_at(const array_t* array, size_t index);
 
 /*
   @return       The inserted element
@@ -69,7 +69,20 @@ void* array_push_back(array_t* array, void* value);
   @description  Remove element at position index of array
   @warning      Undefined behaviour if index is greater than the array size
 */
-void array_erase(array_t* array, size_t index);
+void array_erase_at(array_t* array, size_t index);
+
+/*
+  @description  Remove element in array
+  @warning      Undefined behaviour if element is not in array
+*/
+void array_erase(array_t* array, const void* element);
+
+/*
+  @return       The pointer to the first element found or NULL otherwise
+  @description  Find the first element that matches value using the cmp function
+                If cmp is NULL, it will compares pointers
+*/
+void* array_find(const array_t* array, const void* value, int(*cmp)(const void*, const void*));
 
 /*
   @return       Parameter array or NULL on error

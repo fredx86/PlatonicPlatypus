@@ -55,12 +55,36 @@ void* array_push_back(array_t* array, void* value)
   return (array_append_at(array, array->size, value, 1));
 }
 
-void array_erase(array_t* array, size_t index)
+void array_erase_at(array_t* array, size_t index)
 {
   memmove(array_at(array, index),
     array_at(array, index + 1),
     (array->size - index) * array->membsz);
   array->size -= 1;
+}
+
+void array_erase(array_t* array, const void* element)
+{
+  size_t index = ((const char*)element - array->content) / array->membsz;
+  array_erase_at(array, index);
+}
+
+void* array_find(const array_t* array, const void* value, int(*cmp)(const void*, const void*))
+{
+  void* element;
+  for (size_t i = 0; i < array->size; ++i)
+  {
+    element = array_at(array, i);
+    if (!cmp && element == value)
+    {
+      return element;
+    }
+    else if (cmp && cmp(element, value))
+    {
+      return element;
+    }
+  }
+  return NULL;
 }
 
 array_t* array_alloca(array_t* array, size_t n)
