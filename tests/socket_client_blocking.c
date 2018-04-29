@@ -10,7 +10,7 @@ int main()
   //Local server that shouts "HELLO\n"
   struct sock_client client = {
     .host       = "localhost",
-    .service    = "83110",
+    .service    = "4242",
     .options    = {
       .nonblock = 0,
       .ipv4     = 1,
