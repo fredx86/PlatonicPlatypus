@@ -13,7 +13,13 @@ FAILED=0
 
 cleanup()
 {
-  kill $SETUP > /dev/null
+  killall setup.sh > /dev/null
+}
+
+cleanexit()
+{
+  cleanup
+  exit 1
 }
 
 # $1  FILES
@@ -47,9 +53,8 @@ test_failed()
 LIB_FILES=`find ./srcs -type f -name '*.c'`
 TESTS_FILES=`find ./tests -type f -name '*.c'`
 
-trap cleanup INT
+trap cleanexit INT
 ./tests/setup.sh &
-SETUP=$!
 for FILE in $TESTS_FILES; do
   test_run "$FILE $LIB_FILES" "test" `basename $FILE`
 done
