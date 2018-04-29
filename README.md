@@ -9,7 +9,7 @@
 * Functions _XXXX\_clear()_ MUST perform a complete clean-up of the entity, and MAY BE re-usable afterwards without having to call _XXXX\_init()_
 
 ## Tests
-Just run `reg.sh` in order to start all the functional tests available in the directory `.tests`
+Just run `reg.sh` in order to start all the functional tests available in the directory `tests`
 
 ```
 $ ./reg.sh

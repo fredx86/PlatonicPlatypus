@@ -7,9 +7,10 @@ int main()
   size_t n;
   char buf[32];
   sock_t socket;
+  //Local server that shouts "HELLO\n"
   struct sock_client client = {
-    .host       = "www.google.com",
-    .service    = "http",
+    .host       = "localhost",
+    .service    = "83110",
     .options    = {
       .nonblock = 0,
       .ipv4     = 1,
@@ -19,11 +20,11 @@ int main()
   };
   assert(sock_init(&socket));
   assert(sock_connect(&socket, &client) >= 0);
-  assert(sock_send(&socket, &n, "GET / HTTP/1.0\r\n\r\n", 18, NULL) >= 0);
-  assert(n == 18);
-  assert(sock_recv(&socket, &n, buf, 8, NULL) >= 0);
-  assert(n > 0 && n <= 8);
-  assert(strncmp(buf, "HTTP/1.0", 8) == 0);
+  assert(sock_send(&socket, &n, "HELLO\n", 6, NULL) >= 0);
+  assert(n == 6);
+  assert(sock_recv(&socket, &n, buf, 5, NULL) >= 0);
+  assert(n == 5);
+  assert(strncmp(buf, "HELLO", 5) == 0);
   sock_clear(&socket);
   return (0);
 }

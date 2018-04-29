@@ -11,6 +11,11 @@ CL='\033[0m'
 PASSED=0
 FAILED=0
 
+cleanup()
+{
+  kill $SETUP > /dev/null
+}
+
 # $1  FILES
 # $2  OUTPUT FILE
 # $3  TEST NAME
@@ -41,9 +46,14 @@ test_failed()
 
 LIB_FILES=`find ./srcs -type f -name '*.c'`
 TESTS_FILES=`find ./tests -type f -name '*.c'`
+
+trap cleanup INT
+./tests/setup.sh &
+SETUP=$!
 for FILE in $TESTS_FILES; do
   test_run "$FILE $LIB_FILES" "test" `basename $FILE`
 done
+cleanup
 printf "\n"
 printf "Total:\n"
 printf "\t${PASSED} Passed${CL}\n"
