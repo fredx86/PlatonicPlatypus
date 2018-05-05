@@ -27,7 +27,7 @@ void* memfirst(const void* haystack, size_t hsize, const void* needle, size_t ns
   return (NULL);
 }
 
-char* strset(char* dest, size_t maxlen, const char* src)
+char* strset(char* dest, const char* src, size_t maxlen)
 {
   size_t i = 0;
   for (; i < maxlen - 1 && src[i]; ++i)
