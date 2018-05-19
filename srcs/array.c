@@ -89,11 +89,14 @@ void* array_find(const array_t* array, const void* value, int(*cmp)(const void*,
 
 array_t* array_alloca(array_t* array, size_t n)
 {
-  if (array->allocated * array->membsz > n * array->membsz)
+  if (array->allocated > n)
   {
     return (array);
   }
-  array->allocated = (array->allocated * 2) + 8;
+  while (array->allocated <= n)
+  {
+    array->allocated = (array->allocated * 2) + 8;
+  }
   array->content = realloc(array->content, array->membsz * array->allocated);
   if (array->content == NULL)
   {

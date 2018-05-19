@@ -40,6 +40,7 @@ Dump in ./.tests/reg.log
 * UDP Socket
 * Socket (Windows)
 * array_sort()
+* generic_t -> array_t, void*, double
 * ...
 
 ## Notes
