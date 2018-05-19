@@ -22,7 +22,7 @@ inline void* array_at(const array_t* array, size_t index)
   return (array->content + (index * array->membsz));
 }
 
-void* array_append_at(array_t* array, size_t index, void* values, size_t nmember)
+void* array_append_at(array_t* array, size_t index, const void* values, size_t nmember)
 {
   if (!array_alloca(array, array->size + nmember))
   {
@@ -35,22 +35,22 @@ void* array_append_at(array_t* array, size_t index, void* values, size_t nmember
   return (memmove(array_at(array, index), values, nmember * array->membsz));
 }
 
-void* array_append(array_t* array, void* values, size_t nmember)
+void* array_append(array_t* array, const void* values, size_t nmember)
 {
   return (array_append_at(array, array->size, values, nmember));
 }
 
-void* array_insert(array_t* array, size_t index, void* value)
+void* array_insert(array_t* array, size_t index, const void* value)
 {
   return (array_append_at(array, index, value, 1));
 }
 
-void* array_push_front(array_t* array, void* value)
+void* array_push_front(array_t* array, const void* value)
 {
   return (array_append_at(array, 0, value, 1));
 }
 
-void* array_push_back(array_t* array, void* value)
+void* array_push_back(array_t* array, const void* value)
 {
   return (array_append_at(array, array->size, value, 1));
 }

@@ -34,14 +34,14 @@ void* array_at(const array_t* array, size_t index);
                 Do a deep copy of values into array
   @warning      Undefined behaviour if index is greater than the array size
 */
-void* array_append_at(array_t* array, size_t index, void* values, size_t nmember);
+void* array_append_at(array_t* array, size_t index, const void* values, size_t nmember);
 
 /*
   @return       The inserted element
   @description  Append values at the end of array
                 Do a deep copy of values into array
 */
-void* array_append(array_t* array, void* values, size_t nmember);
+void* array_append(array_t* array, const void* values, size_t nmember);
 
 /*
   @return       The element inserted
@@ -49,21 +49,21 @@ void* array_append(array_t* array, void* values, size_t nmember);
                 Do a deep copy of value into array
   @warning      Undefined behaviour if index is greater than the array size
 */
-void* array_insert(array_t* array, size_t index, void* value);
+void* array_insert(array_t* array, size_t index, const void* value);
 
 /*
   @return       The element inserted
   @description  Insert value at the beginning of array
                 Do a deep copy of value into array
 */
-void* array_push_front(array_t* array, void* value);
+void* array_push_front(array_t* array, const void* value);
 
 /*
   @return       The element inserted
   @description  Insert value at the end of array
                 Do a deep copy of value into array
 */
-void* array_push_back(array_t* array, void* value);
+void* array_push_back(array_t* array, const void* value);
 
 /*
   @description  Remove element at position index of array
