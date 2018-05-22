@@ -19,10 +19,10 @@ int main()
     }
   };
   assert(sock_init(&socket));
-  assert(sock_connect(&socket, &client) >= 0);
-  assert(sock_send(&socket, &n, "HELLO\n", 6, NULL) >= 0);
+  assert(sock_connect(&socket, &client));
+  assert(sock_send(&socket, &n, "HELLO\n", 6, NULL));
   assert(n == 6);
-  assert(sock_recv(&socket, &n, buf, 5, NULL) >= 0);
+  assert(sock_recv(&socket, &n, buf, 5, NULL));
   assert(n == 5);
   assert(strncmp(buf, "HELLO", 5) == 0);
   sock_clear(&socket);

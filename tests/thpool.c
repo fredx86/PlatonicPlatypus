@@ -22,7 +22,7 @@ int main()
     array[i] = i;
   }
   assert(thpool_init(&pool, 5));
-  assert(thpool_map(&pool, array, NMEMBR, sizeof(*array), &routine) >= 0);
-  assert(thpool_join(&pool) >= 0);
+  assert(thpool_map(&pool, array, NMEMBR, sizeof(*array), &routine));
+  assert(thpool_join(&pool));
   return (0);
 }

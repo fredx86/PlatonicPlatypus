@@ -17,11 +17,11 @@ typedef struct sock
 } sock_t;
 
 /*
-  @return       0 on success or a negative value on error
+  @return       sock or NULL on error
   @description  Setup sock from host and service using getaddrinfo()
                 Setup sock's options, using socket_pre_options() and socket_post_options()
 */
-int socket_from_host(sock_t* sock,
+sock_t* socket_from_host(sock_t* sock,
   const char* host,
   const char* service,
   const struct sock_options* options,

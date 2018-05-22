@@ -25,31 +25,31 @@ struct thtask
 };
 
 /*
-  @return       Parameter pool or NULL on error
+  @return       pool or NULL on error
   @description  Initialize the thread pool with a number of threads nthreads
 */
 thpool_t* thpool_init(thpool_t* pool, size_t nthreads);
 
 /*
-  @return       0 on success or a negative value on error
+  @return       pool or NULL on error
   @description  Run async function func(arg) using pool
                 If pool is not running, will return an error
 */
-int thpool_push(thpool_t* pool, thrd_start_t func, void* arg);
+thpool_t* thpool_push(thpool_t* pool, thrd_start_t func, void* arg);
 
 /*
-  @return       0 on success or a negative value on error
+  @return       pool or NULL on error
   @description  Run async functions from array of nmemb elements of size size using pool
                 If pool is not running, will return an error
 */
-int thpool_map(thpool_t* pool, void* array, size_t nmemb, size_t size, thrd_start_t func);
+thpool_t* thpool_map(thpool_t* pool, void* array, size_t nmemb, size_t size, thrd_start_t func);
 
 /*
-  @return       0 on success or a negative value on error
+  @return       pool or NULL on error
   @description  Join all threads from pool
                 thpool_init() must be called afterwards if one wants to re-create threads
 */
-int thpool_join(thpool_t* pool);
+thpool_t* thpool_join(thpool_t* pool);
 
 /*
   @return       Always 0
@@ -60,11 +60,11 @@ int thpool_join(thpool_t* pool);
 int thpool_thread(void* pool);
 
 /*
-  @return       0 on success or a negative value on error
+  @return       pool or NULL on error
   @description  Insert task into the pool.tasks
                 If lock is positive, it will lock pool.task_mutex before doing so
 */
-int thpool_push_task(thpool_t* pool, struct thtask* task, int lock);
+thpool_t* thpool_push_task(thpool_t* pool, struct thtask* task, int lock);
 
 /*
   @return       Created thread task or NULL on error

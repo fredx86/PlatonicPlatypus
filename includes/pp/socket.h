@@ -44,18 +44,18 @@ sock_t* sock_init(sock_t* socket);
 void sock_clear(sock_t* socket);
 
 /*
-  @return       0 on success or negative value on error
+  @return       socket or NULL on error
   @description  Prepare socket to talk from client
                 Implementation defined
 */
-int sock_connect(sock_t* socket, const struct sock_client* client);
+sock_t* sock_connect(sock_t* socket, const struct sock_client* client);
 
 /*
-  @return       0 on success or negative value on error
+  @return       socket or NULL on error
   @description  Prepare socket to listen from server
                 Implementation defined
 */
-int sock_listen(sock_t* socket, const struct sock_server* server);
+sock_t* sock_listen(sock_t* socket, const struct sock_server* server);
 
 /*
   @return       0 on success or negative value on error
@@ -65,29 +65,29 @@ int sock_listen(sock_t* socket, const struct sock_server* server);
 int sock_close(sock_t* socket);
 
 /*
-  @return       0 on success or negative value on error
+  @return       socket or NULL on error
   @description  Send data of size to socket with flags
                 sent is filled with the number of bytes sent
                 flags CAN be NULL
                 Implementation defined
 */
-int sock_send(sock_t* socket, size_t* sent, const void* data, size_t size, const void* flags);
+sock_t* sock_send(sock_t* socket, size_t* sent, const void* data, size_t size, const void* flags);
 
 /*
-  @return       0 on success or negative value on error
+  @return       socket or NULL on error
   @description  Receive data of maximum size from socket with flags
                 recvd is filled with the number of bytes received
                 flags CAN be NULL
                 Implementation defined
 */
-int sock_recv(sock_t* socket, size_t* recvd, void* data, size_t size, const void* flags);
+sock_t* sock_recv(sock_t* socket, size_t* recvd, void* data, size_t size, const void* flags);
 
 /*
-  @return       0 on success or negative value on error
+  @return       accepted or NULL on error
   @description  Accept an accepted socket from socket
                 Implementation defined
 */
-int sock_accept(const sock_t* socket, sock_t* accepted);
+sock_t* sock_accept(const sock_t* socket, sock_t* accepted);
 
 /*
   OS-defined implementations

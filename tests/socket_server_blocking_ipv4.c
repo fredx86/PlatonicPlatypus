@@ -19,9 +19,9 @@ int main()
     }
   };
   assert(sock_init(&socket));
-  assert(sock_listen(&socket, &server) >= 0);
-  assert(sock_accept(&socket, &sockclient) >= 0);
-  assert(sock_recv(&sockclient, &n, buf, 5, NULL) >= 0);
+  assert(sock_listen(&socket, &server));
+  assert(sock_accept(&socket, &sockclient));
+  assert(sock_recv(&sockclient, &n, buf, 5, NULL));
   assert(n == 5);
   assert(strncmp(buf, "HELLO", 5) == 0);
   sock_close(&sockclient);

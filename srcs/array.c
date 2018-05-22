@@ -6,7 +6,7 @@ array_t* array_init(array_t* array, size_t membsz)
   array->content = NULL;
   array->size = 0;
   array->allocated = 0;
-  return (array);
+  return array;
 }
 
 void array_clear(array_t* array)
@@ -19,7 +19,7 @@ void array_clear(array_t* array)
 
 inline void* array_at(const array_t* array, size_t index)
 {
-  return (array->content + (index * array->membsz));
+  return array->content + (index * array->membsz);
 }
 
 void* array_emplace(array_t* array, size_t index, const void* values, size_t nmember)
@@ -29,47 +29,47 @@ void* array_emplace(array_t* array, size_t index, const void* values, size_t nme
   {
     return NULL;
   }
-  return (memmove(element, values, nmember * array->membsz));
+  return memmove(element, values, nmember * array->membsz);
 }
 
 void* array_emplace_front(array_t* array, const void* values, size_t nmember)
 {
-  return (array_emplace(array, array->size, values, nmember));
+  return array_emplace(array, array->size, values, nmember);
 }
 
 void* array_emplace_back(array_t* array, const void* values, size_t nmember)
 {
-  return (array_emplace(array, 0, values, nmember));
+  return array_emplace(array, 0, values, nmember);
 }
 
 void* array_insert(array_t* array, size_t index, const void* value)
 {
-  return (array_emplace(array, index, value, 1));
+  return array_emplace(array, index, value, 1);
 }
 
 void* array_push_front(array_t* array, const void* value)
 {
-  return (array_emplace(array, 0, value, 1));
+  return array_emplace(array, 0, value, 1);
 }
 
 void* array_push_back(array_t* array, const void* value)
 {
-  return (array_emplace(array, array->size, value, 1));
+  return array_emplace(array, array->size, value, 1);
 }
 
 void* array_add(array_t* array, size_t index)
 {
-  return (array_create_at(array, index, 1));
+  return array_create_at(array, index, 1);
 }
 
 void* array_add_front(array_t* array)
 {
-  return (array_create_at(array, 0, 1));
+  return array_create_at(array, 0, 1);
 }
 
 void* array_add_back(array_t* array)
 {
-  return (array_create_at(array, array->size, 1));
+  return array_create_at(array, array->size, 1);
 }
 
 void array_erase_at(array_t* array, size_t index)
@@ -114,14 +114,14 @@ void* array_create_at(array_t* array, size_t index, size_t n)
     array_at(array, index),
     (array->size - index) * array->membsz);
   array->size += n;
-  return (array_at(array, index));
+  return array_at(array, index);
 }
 
 array_t* array_allocate(array_t* array, size_t n)
 {
   if (array->allocated > n)
   {
-    return (array);
+    return array;
   }
   while (array->allocated <= n)
   {
@@ -130,7 +130,7 @@ array_t* array_allocate(array_t* array, size_t n)
   array->content = realloc(array->content, array->membsz * array->allocated);
   if (array->content == NULL)
   {
-    return (NULL);
+    return NULL;
   }
-  return (array);
+  return array;
 }
