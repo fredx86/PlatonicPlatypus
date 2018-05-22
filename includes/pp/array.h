@@ -29,19 +29,26 @@ void array_clear(array_t* array);
 void* array_at(const array_t* array, size_t index);
 
 /*
-  @return       The inserted element or NULL on error
-  @description  Append values at position index of array
+  @return       The first emplaced element or NULL on error
+  @description  Emplace values at position index of array
                 Do a deep copy of values into array
   @warning      Undefined behaviour if index is greater than the array size
 */
-void* array_append_at(array_t* array, size_t index, const void* values, size_t nmember);
+void* array_emplace(array_t* array, size_t index, const void* values, size_t nmember);
 
 /*
-  @return       The inserted element or NULL on error
-  @description  Append values at the end of array
+  @return       The first emplaced element or NULL on error
+  @description  Emplace values at the beginning of array
                 Do a deep copy of values into array
 */
-void* array_append(array_t* array, const void* values, size_t nmember);
+void* array_emplace_front(array_t* array, const void* values, size_t nmember);
+
+/*
+  @return       The first emplaced element or NULL on error
+  @description  Emplace values at the end of array
+                Do a deep copy of values into array
+*/
+void* array_emplace_back(array_t* array, const void* values, size_t nmember);
 
 /*
   @return       The element inserted or NULL on error
@@ -66,26 +73,26 @@ void* array_push_front(array_t* array, const void* value);
 void* array_push_back(array_t* array, const void* value);
 
 /*
-  @return       The element created or NULL on error
-  @description  Create an element at position index of array
+  @return       The element added or NULL on error
+  @description  Add an element at position index of array
   @warning      Undefined behaviour if index is greater than the array size
                 The element is not initialized
 */
-void* array_create_at(array_t* array, size_t index);
+void* array_add(array_t* array, size_t index);
 
 /*
-  @return       The element created or NULL on error
-  @description  Create an element at position index of array
+  @return       The element added or NULL on error
+  @description  Add an element at position index of array
   @warning      The element is not initialized
 */
-void* array_create_front(array_t* array);
+void* array_add_front(array_t* array);
 
 /*
-  @return       The element created or NULL on error
-  @description  Create an element at the beginning of array
+  @return       The element added or NULL on error
+  @description  Add an element at the beginning of array
   @warning      The element is not initialized
 */
-void* array_create_back(array_t* array);
+void* array_add_back(array_t* array);
 
 /*
   @description  Remove element at position index of array
@@ -107,12 +114,12 @@ void array_erase(array_t* array, const void* element);
 void* array_find(const array_t* array, const void* value, int(*cmp)(const void*, const void*));
 
 /*
-  @return       The first allocated element or NULL on error
-  @description  Allocate for nmember values at position index of array
+  @return       The first created element or NULL on error
+  @description  Create n elements at position index of array
   @warning      Undefined behaviour if index is greater than the array size
                 The elements are not initialized
 */
-void* array_allocate_at(array_t* array, size_t index, size_t nmember);
+void* array_create_at(array_t* array, size_t index, size_t n);
 
 /*
   @return       Parameter array or NULL on error

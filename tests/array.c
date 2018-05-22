@@ -29,7 +29,7 @@ int main()
   array_clear(&array);
 
   uchar list[] = { 0, 2, 4 };
-  assert(array_append_at(&array, 0, list, 3));
+  assert(array_emplace(&array, 0, list, 3));
   assert(array.size == 3);
   assert(*(uchar*)array_at(&array, 0) == 0);
   assert(*(uchar*)array_at(&array, 1) == 2);
@@ -47,9 +47,9 @@ int main()
   assert(*(uchar*)array_at(&array, 0) == 10);
   array_clear(&array);
 
-  assert(array_create_back(&array));
-  assert(array_create_at(&array, 0));
-  assert(array_create_front(&array));
+  assert(array_add_back(&array));
+  assert(array_add(&array, 0));
+  assert(array_add_front(&array));
   assert(array.size == 3);
   *(uchar*)array_at(&array, 0) = 0;
   *(uchar*)array_at(&array, 1) = 255;
