@@ -24,15 +24,12 @@ inline void* array_at(const array_t* array, size_t index)
 
 void* array_append_at(array_t* array, size_t index, const void* values, size_t nmember)
 {
-  if (!array_alloca(array, array->size + nmember))
+  void* element = array_allocate_at(array, index, nmember);
+  if (!element)
   {
-    return (NULL);
+    return NULL;
   }
-  memmove(array_at(array, index + nmember),
-    array_at(array, index),
-    (array->size - index) * array->membsz);
-  array->size += nmember;
-  return (memmove(array_at(array, index), values, nmember * array->membsz));
+  return (memmove(element, values, nmember * array->membsz));
 }
 
 void* array_append(array_t* array, const void* values, size_t nmember)
@@ -53,6 +50,21 @@ void* array_push_front(array_t* array, const void* value)
 void* array_push_back(array_t* array, const void* value)
 {
   return (array_append_at(array, array->size, value, 1));
+}
+
+void* array_create_at(array_t* array, size_t index)
+{
+  return (array_allocate_at(array, index, 1));
+}
+
+void* array_create_front(array_t* array)
+{
+  return (array_allocate_at(array, 0, 1));
+}
+
+void* array_create_back(array_t* array)
+{
+  return (array_allocate_at(array, array->size, 1));
 }
 
 void array_erase_at(array_t* array, size_t index)
@@ -87,7 +99,20 @@ void* array_find(const array_t* array, const void* value, int(*cmp)(const void*,
   return NULL;
 }
 
-array_t* array_alloca(array_t* array, size_t n)
+void* array_allocate_at(array_t* array, size_t index, size_t nmember)
+{
+  if (!array_allocate(array, array->size + nmember))
+  {
+    return (NULL);
+  }
+  memmove(array_at(array, index + nmember),
+    array_at(array, index),
+    (array->size - index) * array->membsz);
+  array->size += nmember;
+  return (array_at(array, index));
+}
+
+array_t* array_allocate(array_t* array, size_t n)
 {
   if (array->allocated > n)
   {

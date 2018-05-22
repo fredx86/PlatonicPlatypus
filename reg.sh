@@ -30,7 +30,7 @@ test_run()
   printf "${TEST}### $3 ###${CL}\n"
   printf "[ TEST ] Running..."
   printf "[`date +'%D %H:%M:%S'`]\t$3\n" >> $LOGFILE
-  $CC $1 -o $2 -I includes -Wall -Wextra >> $LOGFILE 2>&1 &&
+  $CC $1 -o $2 -I includes -Wall -Wextra -Werror >> $LOGFILE 2>&1 &&
   ./$2 >> $LOGFILE 2>&1 &&
   test_success $3 || test_failed $3
   rm -f $2
