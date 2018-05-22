@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-void* fassert_f(void* ptr, const char* expr, const struct log_info* info)
+void* _fassert(void* ptr, const char* expr, const struct log_info* info)
 {
   int e = errno;
   if (ptr != NULL)
