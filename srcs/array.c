@@ -72,18 +72,23 @@ void* array_add_back(array_t* array)
   return array_create_at(array, array->size, 1);
 }
 
-void array_erase_at(array_t* array, size_t index)
+void array_erase(array_t* array, size_t index, size_t nmember)
 {
   memmove(array_at(array, index),
-    array_at(array, index + 1),
-    (array->size - index) * array->membsz);
-  array->size -= 1;
+    array_at(array, index + nmember),
+    (array->size - (index + nmember)) * array->membsz);
+  array->size -= nmember;
 }
 
-void array_erase(array_t* array, const void* element)
+void array_erase_at(array_t* array, size_t index)
+{
+  array_erase(array, index, 1);
+}
+
+void array_remove(array_t* array, const void* element)
 {
   size_t index = ((const char*)element - array->content) / array->membsz;
-  array_erase_at(array, index);
+  array_erase(array, index, 1);
 }
 
 void* array_find(const array_t* array, const void* value, int(*cmp)(const void*, const void*))

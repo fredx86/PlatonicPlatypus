@@ -42,7 +42,7 @@ int main()
   uchar* element = array_find(&array, &(uchar){ 42 }, &matches_uchar);
   assert(element && *element == 42);
   assert(array_find(&array, element, NULL));
-  array_erase(&array, element);
+  array_remove(&array, element);
   assert(array.size == 1);
   assert(*(uchar*)array_at(&array, 0) == 10);
   array_clear(&array);
@@ -57,6 +57,13 @@ int main()
   assert(*(uchar*)array_at(&array, 0) == 0);
   assert(*(uchar*)array_at(&array, 1) == 255);
   assert(*(uchar*)array_at(&array, 2) == 42);
+  array_clear(&array);
+
+  assert(array_emplace_front(&array, "HELLO WORLD I AM A TEST", 24));
+  array_erase(&array, 5, 6);
+  assert(strcmp("HELLO I AM A TEST", array.content) == 0);
+  array_erase(&array, 5, 12);
+  assert(strcmp("HELLO", array.content) == 0);
   array_clear(&array);
   return (0);
 }

@@ -95,6 +95,13 @@ void* array_add_front(array_t* array);
 void* array_add_back(array_t* array);
 
 /*
+  @description  Remove elements at position index of array for nmember
+  @warning      Undefined behaviour if index is greater than the array size
+                Undefined behaviour if nmember + index is greater than the array size
+*/
+void array_erase(array_t* array, size_t index, size_t nmember);
+
+/*
   @description  Remove element at position index of array
   @warning      Undefined behaviour if index is greater than the array size
 */
@@ -104,7 +111,7 @@ void array_erase_at(array_t* array, size_t index);
   @description  Remove element in array
   @warning      Undefined behaviour if element is not in array
 */
-void array_erase(array_t* array, const void* element);
+void array_remove(array_t* array, const void* element);
 
 /*
   @return       The pointer to the first element found or NULL otherwise
