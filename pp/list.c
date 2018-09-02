@@ -27,7 +27,7 @@ node_t* list_swap(node_t* dest, node_t* src)
 
 node_t* list_push_front(list_t* list, void* value)
 {
-  node_t* node = list_make_node(list, value);
+  node_t* node = list_make_node(value);
 
   if (node == NULL)
   {
@@ -38,7 +38,7 @@ node_t* list_push_front(list_t* list, void* value)
 
 node_t* list_push_back(list_t* list, void* value)
 {
-  node_t* node = list_make_node(list, value);
+  node_t* node = list_make_node(value);
 
   if (node == NULL)
   {
@@ -83,18 +83,18 @@ node_t* list_insert_front(list_t* list, node_t* at, node_t* node)
 void* list_pop(list_t* list)
 {
   void* value = list->begin->value;
-  list_erase(list->begin);
+  list_erase(list, list->begin);
   return (value);
 }
 
-node_t* list_erase(node_t* node)
+node_t* list_erase(list_t* list, node_t* node)
 {
   node_t* next = node->next;
 
-  node->list->size -= 1;
+  list->size -= 1;
   if (node->prev == NULL)
   {
-    node->list->begin = node->next;
+    list->begin = node->next;
   }
   else
   {
@@ -102,7 +102,7 @@ node_t* list_erase(node_t* node)
   }
   if (node->next == NULL)
   {
-    node->list->end = node->prev;
+    list->end = node->prev;
   }
   else
   {
@@ -112,7 +112,7 @@ node_t* list_erase(node_t* node)
   return (next);
 }
 
-node_t* list_make_node(list_t* list, void* value)
+node_t* list_make_node(void* value)
 {
   node_t* node;
 
@@ -120,7 +120,6 @@ node_t* list_make_node(list_t* list, void* value)
   {
     return (NULL);
   }
-  node->list = list;
   node->value = value;
   node->next = NULL;
   node->prev = NULL;

@@ -133,9 +133,5 @@ array_t* array_allocate(array_t* array, size_t n)
     array->allocated = (array->allocated * 2) + 8;
   }
   array->content = realloc(array->content, array->membsz * array->allocated);
-  if (array->content == NULL)
-  {
-    return NULL;
-  }
-  return array;
+  return array->content == NULL ? NULL : array;
 }

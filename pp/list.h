@@ -3,21 +3,19 @@
 
 #include <stdlib.h>
 
-typedef struct node node_t;
+typedef struct node
+{
+  void* value;
+  struct node* next;
+  struct node* prev;
+} node_t;
+
 typedef struct list
 {
   node_t* begin;
   node_t* end;
   size_t size;
 } list_t;
-
-typedef struct node
-{
-  void* value;
-  list_t* list;
-  node_t* next;
-  node_t* prev;
-} node_t;
 
 /*
   @return      Parameter list or NULL on error
@@ -74,13 +72,14 @@ void* list_pop(list_t* list);
 /*
   @return       Parameter node->next
   @description  Erase node
+  @warning      Undefined behaviour if node not in list
 */
-node_t* list_erase(node_t* node);
+node_t* list_erase(list_t* list, node_t* node);
 
 /*
   @return       Created node or NULL on error
   @description  Create and allocate a node from value and assign its list
 */
-node_t* list_make_node(list_t* list, void* value);
+node_t* list_make_node(void* value);
 
 #endif

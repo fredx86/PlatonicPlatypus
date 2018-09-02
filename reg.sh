@@ -1,6 +1,6 @@
 #!/bin/sh
 
-CC=musl-gcc
+CC=gcc
 LOGFILE=./tests/reg.log
 
 KO='\033[1;31m'
@@ -30,7 +30,8 @@ test_run()
   printf "${TEST}### $3 ###${CL}\n"
   printf "[ TEST ] Running..."
   printf "[`date +'%d/%m/%y %H:%M:%S'`]\t$3\n" >> $LOGFILE
-  $CC $1 -o $2 -I includes -Wall -Wextra -Werror >> $LOGFILE 2>&1 &&
+  $CC $1 -o $2 -I . -Wall -Wextra -Werror
+  #  >> $LOGFILE 2>&1 &&
   ./$2 >> $LOGFILE 2>&1 &&
   test_success $3 || test_failed $3
   rm -f $2
@@ -50,7 +51,7 @@ test_failed()
   FAILED=$((FAILED + 1))
 }
 
-LIB_FILES=`find ./srcs -type f -name '*.c'`
+LIB_FILES=`find ./pp -type f -name '*.c'`
 TESTS_FILES=`find ./tests -type f -name '*.c'`
 
 trap cleanexit INT

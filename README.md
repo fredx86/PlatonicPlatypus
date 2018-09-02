@@ -15,15 +15,13 @@ Just run `reg.sh` in order to start all the functional tests available in the di
 $ ./reg.sh
 ### array.c ###
 [ TEST ] Running...     PASSED
-### socket.c ###
-[ TEST ] Running...     PASSED
-### thpool.c ###
+### list.c ###
 [ TEST ] Running...     PASSED
 ### utils.c ###
 [ TEST ] Running...     PASSED
 
 Total:
-        4 Passed
+        3 Passed
         0 Failed
 Dump in ./.tests/reg.log
 ```
@@ -31,19 +29,11 @@ Dump in ./.tests/reg.log
 ## Current implementations
 * Array
 * Linked list
-* TCP Socket (Unix)
-* Thread pool
 * Logger
 * Fatal assert
+* Time
 
 ## Futures implementations
 * Hashmaps
-* sock_recv_timeout()
-* UDP Socket
-* Socket (Windows)
 * array_sort()
-* generic_t -> array_t, void*, double
 * ...
-
-## Notes
-* [thpool](./thpool) is using c11 _threads.h_
