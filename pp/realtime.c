@@ -1,10 +1,12 @@
 #include "pp/realtime.h"
 
 #ifdef __unix__
-#include <sys/time.h>
+  #include <sys/time.h>
+#endif
 
 int realtime_now(realtime_t* time)
 {
+#ifdef __unix__
   struct timeval tv;
 
   if (gettimeofday(&tv, NULL) < 0)
@@ -14,10 +16,10 @@ int realtime_now(realtime_t* time)
   time->seconds = tv.tv_sec;
   time->milliseconds = tv.tv_usec / 1000;
   return 1;
-}
 #else
-#error realtime_now() not supported for your OS
+  #error realtime_now() not supported for your OS
 #endif
+}
 
 float realtime_elapsed(const realtime_t* end, const realtime_t* begin)
 {
