@@ -3,7 +3,7 @@
 inline int is_little_endian()
 {
   unsigned n = 1;
-  return (*(char*)&n);
+  return *(char*)&n;
 }
 
 void* memfirst(const void* haystack, size_t hsize, const void* needle, size_t nsize)
@@ -21,10 +21,10 @@ void* memfirst(const void* haystack, size_t hsize, const void* needle, size_t ns
     i -= j;
     if (j == nsize)
     {
-      return ((void*)a + i);
+      return (void*)a + i;
     }
   }
-  return (NULL);
+  return NULL;
 }
 
 char* strset(char* dest, const char* src, size_t maxlen)
@@ -35,5 +35,5 @@ char* strset(char* dest, const char* src, size_t maxlen)
     dest[i] = src[i];
   }
   dest[i] = 0;
-  return (dest);
+  return dest;
 }
