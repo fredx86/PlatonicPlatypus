@@ -22,14 +22,32 @@ inline void* array_at(const array_t* array, size_t index)
   return array->content + (index * array->membsz);
 }
 
+void* array_find(const array_t* array, const void* value, int(*cmp)(const void*, const void*))
+{
+  void* current;
+  for (size_t i = 0; i < array->size; ++i)
+  {
+    current = array_at(array, i);
+    if (!cmp && current == value)
+    {
+      return current;
+    }
+    else if (cmp && cmp(current, value))
+    {
+      return current;
+    }
+  }
+  return NULL;
+}
+
 void* array_emplace(array_t* array, size_t index, const void* values, size_t nmember)
 {
-  void* element = array_create_at(array, index, nmember);
-  if (!element)
+  void* value = array_create_at(array, index, nmember);
+  if (!value)
   {
     return NULL;
   }
-  return memmove(element, values, nmember * array->membsz);
+  return memmove(value, values, nmember * array->membsz);
 }
 
 void* array_emplace_front(array_t* array, const void* values, size_t nmember)
@@ -85,35 +103,17 @@ void array_erase_at(array_t* array, size_t index)
   array_erase(array, index, 1);
 }
 
-void array_remove(array_t* array, const void* element)
+void array_remove(array_t* array, const void* value)
 {
-  size_t index = ((const char*)element - array->content) / array->membsz;
+  size_t index = ((const char*)value - array->content) / array->membsz;
   array_erase(array, index, 1);
-}
-
-void* array_find(const array_t* array, const void* value, int(*cmp)(const void*, const void*))
-{
-  void* element;
-  for (size_t i = 0; i < array->size; ++i)
-  {
-    element = array_at(array, i);
-    if (!cmp && element == value)
-    {
-      return element;
-    }
-    else if (cmp && cmp(element, value))
-    {
-      return element;
-    }
-  }
-  return NULL;
 }
 
 void* array_create_at(array_t* array, size_t index, size_t n)
 {
   if (!array_allocate(array, array->size + n))
   {
-    return (NULL);
+    return NULL;
   }
   memmove(array_at(array, index + n),
     array_at(array, index),

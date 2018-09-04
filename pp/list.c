@@ -16,6 +16,22 @@ void list_clear(list_t* list)
   }
 }
 
+node_t* list_find(list_t* list, void* value, int(*cmp)(const void*, const void*))
+{
+  for (node_t* it = list->begin; it; it = it->next)
+  {
+    if (!cmp && it->value == value)
+    {
+      return it;
+    }
+    else if (cmp && cmp(it->value, value))
+    {
+      return it;
+    }
+  }
+  return NULL;
+}
+
 node_t* list_swap(node_t* dest, node_t* src)
 {
   void* value = dest->value;
@@ -110,6 +126,12 @@ node_t* list_erase(list_t* list, node_t* node)
   }
   free(node);
   return next;
+}
+
+void* list_remove(list_t* list, void* value)
+{
+  list_erase(list, list_find(list, value, NULL));
+  return value;
 }
 
 node_t* list_make_node(void* value)
