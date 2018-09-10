@@ -18,15 +18,29 @@ typedef struct list
 } list_t;
 
 /*
-  @return      Parameter `list` or NULL on error
-  @description Initialize the list
+  @return       Parameter `list` or NULL on error
+  @description  Initialize the list
 */
 list_t* list_init(list_t* list);
 
 /*
-  @description Remove all values in `list`
+  @description  Remove all values in `list`
 */
 void list_clear(list_t* list);
+
+/*
+  @return       First element of `list`
+  @description  Returns the first element of the list
+  @warning      Undefined behaviour if `list` is empty
+*/
+void* list_front(const list_t* list);
+
+/*
+  @return       Last element of `list`
+  @description  Returns the last element of the list
+  @warning      Undefined behaviour if `list` is empty
+*/
+void* list_back(const list_t* list);
 
 /*
   @return       The pointer to the first node value found or NULL otherwise

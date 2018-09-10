@@ -107,11 +107,43 @@ static void test_remove()
   list_clear(&list);
 }
 
+static void test_front()
+{
+  list_t list;
+
+  assert(list_init(&list));
+
+  assert(list_push_back(&list, "a"));
+  assert(list_push_back(&list, "b"));
+  assert(list.size == 2);
+
+  assert(strcmp((char*)list_front(&list), "a") == 0);
+
+  list_clear(&list);
+}
+
+static void test_back()
+{
+  list_t list;
+
+  assert(list_init(&list));
+
+  assert(list_push_back(&list, "a"));
+  assert(list_push_back(&list, "b"));
+  assert(list.size == 2);
+
+  assert(strcmp((char*)list_back(&list), "b") == 0);
+
+  list_clear(&list);
+}
+
 int main()
 {
   test_push_back();
   test_push_front();
   test_find();
   test_remove();
+  test_front();
+  test_back();
   return 0;
 }

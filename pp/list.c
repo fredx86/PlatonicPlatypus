@@ -16,6 +16,16 @@ void list_clear(list_t* list)
   }
 }
 
+inline void* list_front(const list_t* list)
+{
+  return list->begin->value;
+}
+
+inline void* list_back(const list_t* list)
+{
+  return list->end->value;
+}
+
 node_t* list_find(list_t* list, void* value, int(*cmp)(const void*, const void*))
 {
   for (node_t* it = list->begin; it; it = it->next)
